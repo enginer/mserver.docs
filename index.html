@@ -11,11 +11,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
       <script src="javascripts/all.js" type="text/javascript"></script>
 
-      <script>
-        $(function() {
-          setupLanguages(["shell","ruby","python"]);
-        });
-      </script>
   </head>
 
   <body class="index">
@@ -27,11 +22,6 @@
     </a>
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
-        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -46,211 +36,1741 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+        
+          <h1 id="Введение">Введение</h1>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>API mserver использует подход <a href="http://wikipedia.org/wiki/REST">REST</a>. Клиенты API получают доступ к Кошельку, Сервисам, Платежам и Картам выполняя <code class="prettyprint">GET</code>, <code class="prettyprint">POST</code> и <code class="prettyprint">DELETE</code> запросы к соответствующим ресурсам <code class="prettyprint">/wallet</code>, <code class="prettyprint">/services</code>, <code class="prettyprint">/payments</code> и <code class="prettyprint">/cards</code>. 
+Вызовы API всегда возвращают JSON. Для возврата статуса запроса к API используется код состояния HTTP. </p>
 
-<p>This example API documentation page was created with <a href="http://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
+<h2 id="Аутентификация">Аутентификация</h2>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</pre>
-<pre class="highlight python"><span class="kn">import</span> <span class="s">'kittn'</span>
+<p>Используется <a href="http://wikipedia.org/wiki/Basic_access_authentication">BASIC аутентификация</a>. В качестве логина используется номер телефона Кошелька в международном формате. Клиент может выполнять аутентификацию 1 раз за сессию, передавая в последующих запросах токен в куке <code class="prettyprint">JSESSONID</code>. </p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">Kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</pre>
-<pre class="highlight shell"><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</pre>
+<p>Возможны следующие коды ошибок, уточняющие HTTP статус 401:</p>
 
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
-
-<p><aside class="notice">
-You must replace <code class="prettyprint">meowmeowmeow</code> with your personal API key.
-</aside></p>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h1><pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</pre>
-<pre class="highlight python"><span class="kn">import</span> <span class="s">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">Kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</pre>
-<pre class="highlight shell">curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></pre>
-
-<p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request'>HTTP Request</h1>
-<p><code class="prettyprint">GET http://example.com/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h1>
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>Код ошибки</th>
+<th style="text-align: left">Описание</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td><code class="prettyprint">wallet_not_active</code></td>
+<td style="text-align: left">Кошелек не активирован. Активируйте кошелек вызовом POST /wallet/activate.</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td><code class="prettyprint">wallet_disabled</code></td>
+<td style="text-align: left">Кошелек заблокирован администрацией. Причина блокировки возвращается в поле <code class="prettyprint">details</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">reset_password</code></td>
+<td style="text-align: left">Требуется смена пароля. Измените пароль вызовами POST /wallet/send_password_reset_code и POST /wallet/reset_password.</td>
 </tr>
 </tbody></table>
 
-<p><aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside></p>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h1><pre class="highlight ruby"><span class="nb">require</span> <span class="s1">'kittn'</span>
+<blockquote>
+<p>Для авторизации можно использовать такой шаблон:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u&lt;phone&gt;:&lt;password&gt; &lt;url&gt;
+</pre>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre>
-<pre class="highlight python"><span class="kn">import</span> <span class="s">'kittn'</span>
+<h2 id="Ошибки">Ошибки</h2>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">Kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre>
-<pre class="highlight shell">curl <span class="s2">"http://example.com/api/kittens/3"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</pre>
+<p>API использует HTTP статусы для возврата ошибок.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: right">Статус</th>
+<th style="text-align: left">Описание</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: right">200</td>
+<td style="text-align: left">запрос выполнен успешно</td>
+</tr>
+<tr>
+<td style="text-align: right">400</td>
+<td style="text-align: left">плохо сформированный запрос (например невалидный JSON)</td>
+</tr>
+<tr>
+<td style="text-align: right">401</td>
+<td style="text-align: left">неверные учетные данные</td>
+</tr>
+<tr>
+<td style="text-align: right">404</td>
+<td style="text-align: left">запрошенный ресурс не существует (для запрашивающего)</td>
+</tr>
+<tr>
+<td style="text-align: right">405</td>
+<td style="text-align: left">не тот HTTP метод, например GET вместо POST</td>
+</tr>
+<tr>
+<td style="text-align: right">415</td>
+<td style="text-align: left">не тот content-type, мы поддерживаем только application/json</td>
+</tr>
+<tr>
+<td style="text-align: right">422</td>
+<td style="text-align: left">запрос сформирован нормально, но не прошел валидацию, например поле не в нужном формате</td>
+</tr>
+<tr>
+<td style="text-align: right">5XX</td>
+<td style="text-align: left">проблема с mserver, повторите запрос позже</td>
+</tr>
+</tbody></table>
+
+<p>HTTP статус дублируется в поле <code class="prettyprint">meta.status</code> ответа mserver. В определенных случаях вместе со статусом возвращается уточненный код ошибки в поле <code class="prettyprint">meta.error</code>. </p>
 
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Например для неверного формата номера телефона при создании кошелка возвращается</p>
 </blockquote>
 <pre class="highlight json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">422</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"error"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"invalid_phone"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre>
 
-<p>This endpoint retrieves a specific kitten.</p>
+<h2 id="Коды-безопасности-и-контрольный-разряд">Коды безопасности и контрольный разряд</h2>
 
-<p><aside class="warning">If you&rsquo;re not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside></p>
-<h3 id='http-request'>HTTP Request</h1>
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h1>
+<p>Для активации созданного кошелька и для смены пароля используется 6-значный цифровой код безопасности, который генерируется случайным образом и отправляется СМС сообщением на телефон кошелька.
+Запросы на создание кошелька, на повторную отправку кода активации и на отправку кода для смены пароля возвращают в поле <code class="prettyprint">check_digit</code> контрольный разряд для сгенерированного кода безопасности, рассчитанный по <a href="http://en.wikipedia.org/wiki/Verhoeff_algorithm">алгоритму Верхуффа</a>. Клиентские приложения могут использовать контрольный разряд для обнаружения опечаток при вводе кода безопасности.</p>
+
+          <h1 id="Кошелек">Кошелек</h1>
+
+<p>Кошелек - учетная запись конечного пользователя в mserver. Позволяет получать информацию о доступном остатке на счете и персональных данных конечного пользователя.  </p>
+
+<blockquote>
+<p>Пример </p>
+</blockquote>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">    
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="p">,</span><span class="w">    
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Поля">Поля</h3>
+
+<ul>
+<li><code class="prettyprint">phone</code> - номер телефона в международном формате, уникальный идентификатор Кошелька (в пределах Проекта), также является логином</li>
+<li><code class="prettyprint">amount</code> - остаток на счете кошелька, в рублях</li>
+<li><code class="prettyprint">name</code> - имя конечного пользователя, возвращается в случае, если были заданы имя и/или фамилия</li>
+<li><code class="prettyprint">verified</code> - <code class="prettyprint">true</code>|<code class="prettyprint">false</code> статус идентификации пользователя</li>
+</ul>
+
+<h2 id="Создание-кошелька">Создание кошелька</h2>
+
+<p><aside class="notice">При создании кошелька на dev сервере на счет зачисляется 10000 рублей.</aside></p>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">phone</code> - номер телефона в международном формате</li>
+<li><code class="prettyprint">password</code> - пароль, не короче 6 символов</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -H <span class="s1">'Content-type:application/json'</span>
+ -d <span class="s1">'{"phone": "+79261111111", "password": "password"}'</span>
+ https://www.synq.ru/mserver2-dev/v1/wallet
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"check_digit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="w"> 
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"dev"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"activation_code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"242321"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">missing_phone</code> - не передан номер телефона</li>
+<li><code class="prettyprint">invalid_phone</code> - номер телефона не соответствует международному формату</li>
+<li><code class="prettyprint">missing_password</code> - не передан пароль</li>
+<li><code class="prettyprint">invalid_password</code> - пароль короче 6 символов</li>
+<li><code class="prettyprint">phone_already_exists</code> - кошелек с таким номером телефона уже существует (и активирован)</li>
+<li><code class="prettyprint">wallet_not_active</code> - кошелек с таким номером телефона уже существует и его нужно активировать кодом из СМС</li>
+</ul>
+
+<p>После создания кошелька требуется активация (подтверждение номера телефона) кодом, который отправлен в СМС сообщении. До выполнения активации
+аутентифицироваться на mserver учетными данными кошелька будет нельзя. Сервер будет возвращать HTTP статус 401 с кодом ошибки <code class="prettyprint">wallet_not_active</code>.</p>
+
+<blockquote>
+<p>Ошибка до активации кошелька</p>
+</blockquote>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">401</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"error"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"wallet_not_active"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<p><aside class="notice">На dev сервере код не отправляется в СМС и возвращается в ответе в поле <code class="prettyprint">dev.security_code</code></aside></p>
+
+<h2 id="Активация-кошелька">Активация кошелька</h2>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">phone</code> - номер телефона в международном формате</li>
+<li><code class="prettyprint">code</code> - код активации кошелька из СМС сообщения</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -H <span class="s1">'Content-type:application/json'</span>  
+ -d <span class="s1">'{"phone": "+79261111111", "code": "242321"}'</span> 
+ https://www.synq.ru/mserver2-dev/v1/wallet/activate
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">missing_phone</code> - не передан номер телефона</li>
+<li><code class="prettyprint">invalid_phone</code> - номер телефона не соответствует международному формату</li>
+<li><code class="prettyprint">missing_code</code> - не передан код активации</li>
+<li><code class="prettyprint">already_active</code> - кошелек с телефоном <code class="prettyprint">phone</code> уже активирован</li>
+<li><code class="prettyprint">invalid_code</code> - переданный код активации не совпадает с присланным в СМС</li>
+<li><code class="prettyprint">code_expired</code> - с момента создания кода активации прошло больше 15 минут, запросите код повторно</li>
+<li><code class="prettyprint">failure_limit_exceeded</code> - вы прислали неверный код активации больше 5 раз, обратитесь в поддержку</li>
+</ul>
+
+<h2 id="Запрос-повторной-отправки-кода-активации">Запрос повторной отправки кода активации</h2>
+
+<p><aside class="notice">На dev сервере код не отправляется в СМС и возвращается в ответе в поле <code class="prettyprint">dev.security_code</code></aside></p>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">phone</code> - номер телефона в международном формате</li>
+</ul>
+<pre class="highlight shell">curl -H <span class="s1">'Content-type:application/json'</span>
+ -d <span class="s1">'{"phone": "+79261111111"}'</span> 
+ https://www.synq.ru/mserver2-dev/v1/wallet/resend_code
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"check_digit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"dev"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"security_code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"482721"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">missing_phone</code> - не передан номер телефона</li>
+<li><code class="prettyprint">invalid_phone</code> - номер телефона не соответствует международному формату</li>
+<li><code class="prettyprint">already_active</code> - кошелек с телефоном <code class="prettyprint">phone</code> уже активирован</li>
+<li><code class="prettyprint">failure_limit_exceeded</code> - вы прислали неверный код активации больше 5 раз, обратитесь в поддержку</li>
+<li><code class="prettyprint">resend_limit_exceeded</code> - mserver отправил отведенные 5 СМС сообщений с кодами активации, обратитесь в поддержку</li>
+</ul>
+
+<h2 id="Запрос-кода-для-смены-пароля">Запрос кода для смены пароля</h2>
+
+<p><aside class="notice">На dev сервере код не отправляется в СМС и возвращается в ответе в поле <code class="prettyprint">dev.security_code</code></aside></p>
+<pre class="highlight shell"><span class="gp">$ </span>curl -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"phone": "+79261111111"}'</span>
+ https://www.synq.ru/mserver2-dev/v1/wallet/send_password_reset_code
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"check_digit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"dev"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"security_code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"934879"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">failure_limit_exceeded</code> - вы прислали неверный код смены пароля больше 5 раз, обратитесь в поддержку</li>
+<li><code class="prettyprint">resend_limit_exceeded</code> - mserver отправил отведенные 5 СМС сообщений с кодами смены пароля, обратитесь в поддержку</li>
+</ul>
+
+<h2 id="Смена-пароля">Смена пароля</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"code": "934879", "password": "PassWord", "phone": "+79261111111"}'</span> ttps://www.synq.ru/mserver2-dev/v1/wallet/reset_password
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">missing_code</code> - не передан код смены пароля </li>
+<li><code class="prettyprint">invalid_code</code> - переданный код смены пароля не совпадает с присланным в СМС</li>
+<li><code class="prettyprint">code_expired</code> - с момента создания кода смены пароля прошло больше 15 минут, запросите код повторно</li>
+<li><code class="prettyprint">failure_limit_exceeded</code> - вы прислали неверный код смены пароля больше 5 раз, обратитесь в поддержку</li>
+</ul>
+
+<h2 id="Загрузка-кошелька">Загрузка кошелька</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">    
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111111"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"reset_password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Поиск-кошельков">Поиск кошельков</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+-d <span class="s1">'{"phones": ["+79990000000", "+79260000001", "+79260000002"]}'</span> 
+https://www.synq.ru/mserver2-dev/v1/wallet/find
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79260000001"</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79260000002"</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Удаление-кошелька">Удаление кошелька</h2>
+
+<p><aside class="notice">Команда работает только на dev сервере.</aside></p>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -X DELETE https://www.synq.ru/mserver2-dev/v1/wallet
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Задание-персональных-данных-пользователя">Задание персональных данных пользователя</h2>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">family_name</code> - фамилия</li>
+<li><code class="prettyprint">given_name</code> - имя</li>
+<li><code class="prettyprint">patronymic_name</code> - отчество</li>
+<li><code class="prettyprint">passport_series_number</code> - серия и номер паспорта, 10 цифр</li>
+<li><code class="prettyprint">passport_issued_at</code> - дата в формате гггг-мм-дд</li>
+<li><code class="prettyprint">itn</code> - ИНН, 12 цифр</li>
+<li><code class="prettyprint">ssn</code> - СНИЛС, 11 цифр</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+-d <span class="s1">'{"family_name": "Арсеньев", "given_name": "Алексей", "patronymic_name": "Александрович", 
+"passport_series_number": "2202655885", "passport_issued_at" : "2012-02-27", 
+"itn": "330500938709", "ssn": "11223344595"}'</span>  
+https://www.synq.ru/mserver2-dev/v1/wallet/person
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"family_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"given_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"patronymic_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Александрович"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"passport_series_number"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2202655885"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"passport_issued_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-02-27"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"itn"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"330500938709"</span><span class="p">,</span><span class="w">                       
+    </span><span class="s2">"ssn"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"11223344595"</span><span class="p">,</span><span class="w">                        
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"data_entered"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Коды-ошибок">Коды ошибок</h3>
+
+<ul>
+<li><code class="prettyprint">invalid_family_name</code> - фамилия длиннее 512 символов</li>
+<li><code class="prettyprint">invalid_given_name</code> - имя длиннее 512 символов</li>
+<li><code class="prettyprint">invalid_patronymic_name</code> - отчество длиннее 512 символов</li>
+<li><code class="prettyprint">invalid_passport_series_number</code> - серия/номер паспорта не соответствует формату</li>
+<li><code class="prettyprint">invalid_itn</code> - ИНН не соответствует формату</li>
+<li><code class="prettyprint">invalid_ssn</code> - СНИЛС не соответствует формату</li>
+<li><code class="prettyprint">person_already_verified</code> - перcональные данные утверждены, изменение невозможно, обратитесь в поддержку</li>
+</ul>
+
+<h2 id="Загрузка-персональных-данных-пользователя">Загрузка персональных данных пользователя</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet/person
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"family_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"given_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"patronymic_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Александрович"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"passport_series_number"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2202655885"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"passport_issued_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-02-27"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"itn"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"330500938709"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"ssn"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"11223344595"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"data_verified"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-05-29T17:06:20.066Z"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Статусы-персональных-данных">Статусы персональных данных</h2>
+
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Description</th>
+<th style="text-align: left">Код статуса ПД</th>
+<th style="text-align: left">Описание</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the cat to retrieve</td>
+<td style="text-align: left"><code class="prettyprint">data_entered</code></td>
+<td style="text-align: left">Персональные данные введены пользователем, изменение ПД возможно</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">data_verified</code></td>
+<td style="text-align: left">Персональные данные проверены, дальнейшее изменение ПД невозможно</td>
 </tr>
 </tbody></table>
 
-          <h1 id='errors'>Errors</h1>
-<p><aside class="notice">This error section is stored in a separate file in <code class="prettyprint">includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the <code class="prettyprint">includes</code> folder and add them to the top of your <code class="prettyprint">index.md</code>&rsquo;s frontmatter. Files are included in the order listed.</aside></p>
+          <h1 id="Сервисы">Сервисы</h1>
 
-<p>The Kittn API uses the following error codes:</p>
+<p>Сервис - это назначение платежа. Сервис содержит описание параметров, которые должны быть переданы в платежном запросе конечным пользователем.</p>
+
+<blockquote>
+<p>Пример</p>
+</blockquote>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Альфа Банк"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"min"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"max"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verification_required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{16}$"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"numeric"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Поля">Поля</h3>
+
+<ul>
+<li><code class="prettyprint">id</code> - идентификатор сервиса, передается в платежном запросе в поле <code class="prettyprint">service</code> для указания назначения платежа</li>
+<li><code class="prettyprint">name</code> - человекочитаемое имя сервиса</li>
+<li><code class="prettyprint">min</code>, <code class="prettyprint">max</code> - минимальная и максимальная сумма платежа, включительно</li>
+<li><code class="prettyprint">verification_required</code> - true | false требуется ли идентификация плательщика</li>
+<li><code class="prettyprint">parameters.code</code> - ключ параметра платежа</li>
+<li><code class="prettyprint">min_length</code>, <code class="prettyprint">max_length</code> - минимальная и максимальная длина значения параметра платежа</li>
+<li><code class="prettyprint">name</code> - человекочитаемое имя параметра</li>
+<li><code class="prettyprint">pattern</code> - регулярное выражение, которому должно удовлетворять значение параметра платежа</li>
+<li><code class="prettyprint">pattern_description</code> - человекочитаемое описание для <code class="prettyprint">pattern</code></li>
+<li><code class="prettyprint">type</code> - numeric|text|enum тип параметра платежа, число/текст/перечисление</li>
+<li><code class="prettyprint">items</code> - возможные значения параметра платежа с типом enum</li>
+</ul>
+
+<h2 id="Загрузка-списка-сервисов">Загрузка списка сервисов</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services
+</pre>
+<pre class="highlight json"><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Альфа Банк"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"min"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"max"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verification_required"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{16}$"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"numeric"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"valid"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Срок действия (вид: ГГММ)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{4}$"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Срок действия (вид: ГГММ)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Загрузка-сервиса-по-идентификатору">Загрузка сервиса по идентификатору</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/1
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Мегафон"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"min"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"max"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verification_required"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{10}$"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"numeric"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Сервисы-по-группам">Сервисы по группам</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/groups
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"bank"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Банковские услуги"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"services"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Альфа Банк"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"min"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"max"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15000</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"verification_required"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{16}$"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"numeric"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ карты (16 цифр)"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"valid"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"min_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"max_length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Срок действия (вид: ГГММ)"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pattern"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"^\\d{4}$"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"pattern_description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Срок действия (вид: ГГММ)"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"items"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></pre>
+
+          <h1 id="Платежи">Платежи</h1>
+
+<p>Платеж - это операция движения денежных средств между счетами mserver выполняемая по распоряжению пользователя. Платежи различаются по типу:</p>
 
 <table><thead>
 <tr>
-<th>Error Code</th>
-<th>Meaning</th>
+<th style="text-align: left">Код типа платежа</th>
+<th style="text-align: left">Описание</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td style="text-align: left"><code class="prettyprint">out</code></td>
+<td style="text-align: left">Вывод средств со счета кошелька пользователя в пользу провайдера (провайдер КредитПилот)</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td style="text-align: left"><code class="prettyprint">p2p</code></td>
+<td style="text-align: left">Перевод денег со счета кошелька пользователя на счет кошелька другого пользователя</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slown down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+<td style="text-align: left"><code class="prettyprint">in</code></td>
+<td style="text-align: left">Ввод средств на счет кошелька пользователя через провайдера (провайдеры КредитПилот, ИПСП, Рапида)</td>
 </tr>
 </tbody></table>
+
+<h3 id="Поля,-общие-для-всех-типов-платежей">Поля, общие для всех типов платежей</h3>
+
+<ul>
+<li><code class="prettyprint">type</code> - in|out|p2p тип Платежа</li>
+<li><code class="prettyprint">client_payment_id</code> - клиентский идентификатор (UUID)</li>
+<li><code class="prettyprint">amount</code> - сумма к зачислению в рублях</li>
+<li><code class="prettyprint">total</code> - полная сумма Платежа с учетом комиссии в рублях</li>
+<li><code class="prettyprint">createdAt</code> - время создания</li>
+<li><code class="prettyprint">processedAt</code> - время завершения online обработки</li>
+<li><code class="prettyprint">status</code> - состояние</li>
+<li><code class="prettyprint">decline_reason</code> - причина отказа в проведении</li>
+</ul>
+
+<h3 id="Поля-для-платежей-типа-out-(вывод-денег)">Поля для платежей типа <code class="prettyprint">out</code> (вывод денег)</h3>
+
+<ul>
+<li><code class="prettyprint">service</code> - назначение платежа</li>
+<li><code class="prettyprint">outbound</code> - провайдер, на счет которого были отправлены деньги со счете кошелька</li>
+<li><code class="prettyprint">parameters</code> - параметры платежа, например номер карты/телефона</li>
+</ul>
+
+<h3 id="Поля-для-типа-in-(ввод-денег)">Поля для типа <code class="prettyprint">in</code> (ввод денег)</h3>
+
+<ul>
+<li><code class="prettyprint">inbound</code> - провайдер, со счета которого деньги пришли на счет кошелька</li>
+<li><code class="prettyprint">card</code> - карта с которой прошло пополнение</li>
+</ul>
+
+<h3 id="Поля-для-типа-p2p-(перевод-между-кошельками)">Поля для типа <code class="prettyprint">p2p</code> (перевод между кошельками)</h3>
+
+<ul>
+<li><code class="prettyprint">destination</code> - кошелек назначения перевода</li>
+<li><code class="prettyprint">message</code> - сообщение адресату перевода</li>
+</ul>
+
+<h2 id="Статусы-платежа">Статусы платежа</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Код статуса платежа</th>
+<th style="text-align: left">Описание</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">created</code></td>
+<td style="text-align: left">Платеж создан (например вызовом POST /payments) и ожидает от клиента команды на исполнение</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">processing</code></td>
+<td style="text-align: left">Платеж был запущен в обработку (например вызовом POST /payments/{id}/pay и исполняется</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">completed</code></td>
+<td style="text-align: left">Платеж успешно исполнен</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">declined</code></td>
+<td style="text-align: left">Платеж отклонен, с уточнением причины в поле <code class="prettyprint">decline_reason</code></td>
+</tr>
+</tbody></table>
+
+<h2 id="Причины-отказа-в-проведении-платежа">Причины отказа в проведении платежа</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Код причины отказа</th>
+<th style="text-align: left">Описание</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">invalid_data</code></td>
+<td style="text-align: left">Неверные данные платежа (например неверный номер карты/номер телефона)</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">insufficient_funds</code></td>
+<td style="text-align: left">Недостаточно средств на счете кошелька</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">internal_error</code></td>
+<td style="text-align: left">Что-то пошло не так, обратитесь в поддержку</td>
+</tr>
+</tbody></table>
+
+<h2 id="Клиентский-идентификатор-платежа">Клиентский идентификатор платежа</h2>
+
+<p>Клиент обязан генерировать <a href="http://wikipedia.org/wiki/UUID">UUID</a> для каждого отдельного платежа и передавать его в поле <code class="prettyprint">client_payment_id</code> платежного запроса. Если в процессе создания платежа клиент получил ошибку I/O, он должен повторять запрос создания платежа с тем же самым <code class="prettyprint">client_payment_id</code> до получения ответа. Гарантируется, что платеж с данным <code class="prettyprint">client_payment_id</code> будет создан не более 1 раза.</p>
+
+<h2 id="Проведение-платежа">Проведение платежа</h2>
+
+<p>Для передачи mserver платежа на исполнение клиент следует общепринятому в платежной индустрии двухфазному протоколу. В первой фазе, подготовительной, клиент создает в mserver Платеж с необходимыми параметрами. 
+По завершении подготовительной фазы клиент получает от mserver информацию о полной стоимости платежа (поле <code class="prettyprint">total</code>) и предъявляет полную стоимость платежа пользователю кошелька. 
+В случае согласия пользователя с условиями исполнения платежа клиент от имени пользователя инициирует исполнение подготовленного платежа (вторая фаза, платежная).</p>
+
+<p><img alt="проведение платежа" src="http://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUg0JTQstGD0YXRhNCw0LfQvdGL0Lkg0L_Qu9Cw0YLQtdC2AAoJ0YDQvtGC0L7QutC-0LsgbXNlcnZlcgoKbm90ZSBvdmVyIGNsaWVudCwAEwg6INCf0L7QtNCzADIHstC4AE8Fu9GM0LDRjyAAbQewCgoANAYtPgAxCVBPU1QgL3BheW1lbnRzIHtwYXJhbXN9AGcGcmlnaHQgb2YAYAkKAIEGCCDRgdC-0LfQtNCw0LXRggCBPA0sCiDRgNCw0YHRgdGH0LjRgtGL0LIAIAi60L7QvNC40YHRgdC40Y4KINC90LjQutGC0L4AAwiD0LTQsCDQtdGJ0LUg0L3QtQCCHQq40YIKZW5kIG5vdGUKCgCCEwctPgCCCgY6IHtpZDogMTIzLCBhbW91bnQ6IDEwMCwgdG90YWw6IDExMCwgbmV4dF9hY3Rpb246IHBheX0AglEHbGVmAIFlBQBEBwog0LrQu9C40LXQvQCBWQa-0LrQsNC3AIFADL_QvgCCXgW3AIJuBQCDQQa70Y4gCgAUB9C90YPRjiDRgQCDSQW40LzQvtGB0YLRjACDag6wIDExMCDRgAoAOheMAIJnBrMAhCYFgdC10L0AggQN0YwAgggLAIQGHgCEYQsAg2ouLzEyMy9wYXkAg3YhAFQFh9C40L0AhBAJ0YAAhQ0FvtC0AIEoBgCFaA0AgloO0YMAhXkGtdC00LvQsNCzAIRYBtGB0Y8g0L4AhhUFsNGI0LgAgmgG0YwKAIUCBQCCWgbRjwCERQUAhCILAIJXBQCEJQoAhBwSAIN_DWdldH0Ahg0TR0UAgXgPAIRjE3N0YXR1czogY29tcGxldGVkAIY4BwCEMSO70YPRhwCGPQcAgSshIAoAWQogKNC40YEAhGAI0LXQvSkKIFlheSEAhhcJ&amp;s=modern-blue" /></p>
+
+<h3 id="Платеж-в-пользу-провайдера">Платеж в пользу провайдера</h3>
+
+<h4 id="Параметры">Параметры</h4>
+
+<ul>
+<li><code class="prettyprint">type</code> = out - тип платежа</li>
+<li><code class="prettyprint">client_payment_id</code> - клиентский идентификатор платежа</li>
+<li><code class="prettyprint">amount</code> -  сумма к зачислению</li>
+<li><code class="prettyprint">service</code> - назначение платежа, идентификатор Сервиса</li>
+<li><code class="prettyprint">parameters</code> - параметры платежного запроса в соответствии с /services/{service}</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"type": "out", "client_payment_id": "e731a7e2-c553-4295-867e-1023359bee28", 
+ "amount": 100, "service": 61, "parameters": {"phoneNumber": "9267101283", 
+ "BIK": "044583151", "Name": "name", "SName": "sname", "Fam": "fam"}}'</span> 
+ https://www.synq.ru/mserver2-dev/v1/payments
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"get"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089234883</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e731a7e2-c553-4295-867e-1023359bee28"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-05-26T15:15:07.389Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">61</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Мультибанк"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ Телефона (10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"9267101283"</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"BIK"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"БИК"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"044583151"</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Name"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Имя Отправителя"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"name"</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"SName"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Отчество Отправителя"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sname"</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Fam"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Фамилия Отправителя"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"fam"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h4 id="Коды-ошибок">Коды ошибок</h4>
+
+<ul>
+<li><code class="prettyprint">missing_type</code> - отсутствует обязательный параметр type</li>
+<li><code class="prettyprint">missing_client_payment_id</code> - отсутствует обязательный параметр client_payment_id</li>
+<li><code class="prettyprint">missing_amount</code> - отсутствует обязательный параметр amount</li>
+<li><code class="prettyprint">invalid_amount</code> - неверная сумма платежа, должно быть min &lt;= amount &lt;= max, где min и max - минимальная и максимальная сумма для Сервиса</li>
+<li><code class="prettyprint">missing_service</code> - отсутствует обязательный параметр service</li>
+<li><code class="prettyprint">service_not_found</code> - запрошенный сервис не найдет</li>
+<li><code class="prettyprint">missing_parameters</code> - не передан обязательный параметр parameters</li>
+</ul>
+
+<h3 id="Перевод-между-кошельками">Перевод между кошельками</h3>
+
+<h4 id="Параметры">Параметры</h4>
+
+<ul>
+<li><code class="prettyprint">type</code> = p2p - тип платежа</li>
+<li><code class="prettyprint">client_payment_id</code> - клиентский идентификатор платежа</li>
+<li><code class="prettyprint">amount</code> -  сумма перевода</li>
+<li><code class="prettyprint">destination</code> - кошелек назначения перевода</li>
+<li><code class="prettyprint">message</code> - сообщение адресату перевода (опционально)</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"type": "p2p", "client_payment_id": "071c6d23-7508-4e35-ad92-852308a47677", "amont": 100, "destination": "+79261111112", "message": "Съешь ещё этих мягких французских булок, да выпей чаю"}'</span>   https://www.synq.ru/mserver2-dev/v1/payments
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pay"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237211</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47677"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">100.00</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T06:30:01.277Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"p2p"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"destination"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79261111112"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"message"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Съешь ещё этих мягких французских булок, да выпей чаю"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h4 id="Коды-ошибок">Коды ошибок</h4>
+
+<ul>
+<li><code class="prettyprint">missing_type</code> - отсутствует обязательный параметр type</li>
+<li><code class="prettyprint">missing_client_payment_id</code> - отсутствует обязательный параметр client_payment_id</li>
+<li><code class="prettyprint">missing_amount</code> - отсутствует обязательный параметр amount</li>
+<li><code class="prettyprint">invalid_amount</code> - сумма перевода должна быть &gt; 0</li>
+<li><code class="prettyprint">missing_destination</code> - отсутствует обязательный параметр destination</li>
+<li><code class="prettyprint">destination_not_found</code> - кошелек назначения платежа не найден</li>
+<li><code class="prettyprint">invalid_destination</code> - попытка отправить p2p перевод самому себе</li>
+<li><code class="prettyprint">insufficient_funds</code> - недостаточно средств для выполнения p2p перевода</li>
+</ul>
+
+<h3 id="Пополнение-кошелька">Пополнение кошелька</h3>
+
+<p>Пополнение кошелька пользователя через запросы к API возможно с использованием пластиковых карт. Существуют 3 сценария пополнения кошелька с карты:</p>
+
+<ul>
+<li>однократное пополнение</li>
+<li>однократное пополнение с сохранением данных карты для последующего использования (&ldquo;привязка карты&rdquo;)</li>
+<li>пополнение с сохраненной ранее карты (&ldquo;рекарринг&rdquo;)</li>
+</ul>
+
+<h4 id="Параметры">Параметры</h4>
+
+<ul>
+<li><code class="prettyprint">type</code> = in - тип платежа</li>
+<li><code class="prettyprint">client_payment_id</code> - клиентский идентификатор платежа</li>
+<li><code class="prettyprint">amount</code> -  сумма к зачислению</li>
+<li><code class="prettyprint">store_card</code> - <code class="prettyprint">true</code> | <code class="prettyprint">false</code> - сохранить карту, чтобы использовать ее для платежей в дальнейшем (опциональный)</li>
+<li><code class="prettyprint">card</code> - идентификатор сохраненной карты с которой будут списаны деньги (опциональный)</li>
+</ul>
+
+<blockquote>
+<p><strong><em>Пример однократного пополнения</em></strong></p>
+
+<p>Создаем платеж:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"type": "in", "client_payment_id": "071c6d23-7508-4e35-ad92-852308a47678", "amount": 100}'</span>
+ https://www.synq.ru/mserver2-dev/v1/payments
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pay"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237212</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47678"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">100.00</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T06:55:27.870Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p>Платим:</p>
+</blockquote>
+<pre class="highlight shell"><span class="nv">$curl</span> -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -X POST https://www.synq.ru/mserver2-dev/v1/payments/1401089237212/pay
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"get"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237212</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47678"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T06:55:27.870Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_page_url"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://test1.ipsp.com/frontend/endpoint?product_id=1721&amp;desc=mserver2&amp;payment_type=S&amp;amount=100.00&amp;currency=RUB&amp;cf=1401089237212&amp;locale=ru&amp;hash=3d49fa2b7ceb67f8ad7ed7f2247dd2cad1c4acdc"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p>далее следует перенаправить пользователя на платежную страницу по ссылке из поля <code class="prettyprint">card.payment_page_url</code>.</p>
+
+<p><strong><em>Пример однократного пополнения с сохранением данных карты</em></strong></p>
+
+<p>Создаем платеж:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -d <span class="s1">'{"type": "in", "client_payment_id": "071c6d23-7508-4e35-ad92-852308a47679", "amount": 100, "store_card": true}'</span> https://www.synq.ru/mserver2-dev/v1/payments
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pay"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237231</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47679"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">100.00</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T08:31:24.058Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p>Платим:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password-H <span class="s1">'Content-type:application/json'</span> 
+-X POST https://www.synq.ru/mserver2-dev/v1/payments/1401089237231/pay
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"get"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237231</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47679"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T08:31:24.058Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_page_url"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://test1.ipsp.com/frontend/endpoint?product_id=1721&amp;desc=mserver2&amp;payment_type=S&amp;amount=100.00&amp;currency=RUB&amp;cf=1401089237231&amp;locale=ru&amp;biller_client_id=21&amp;perspayee_expiry=0150&amp;recur_freq=1&amp;hash=5136f2cb7fd77f98b1df86d4644338e5a10dab98"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p>далее следует перенаправить пользователя на платежную страницу по ссылке из поля <code class="prettyprint">card.payment_page_url</code>.</p>
+
+<p><strong><em>Убедимся, что платеж успешен и карта сохранена</em></strong></p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:passwordhttps://www.synq.ru/mserver2-dev/v1/payments/1401089237231
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237231</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47679"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T08:31:24.058Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processed_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T08:39:40.173Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p><strong><em>Пример пополнения с сохраненной карты</em></strong></p>
+
+<p>Используем карту #21 сохраненную в предыдущем примере.</p>
+
+<p>Создаем платеж:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password-H <span class="s1">'Content-type:application/json'</span>
+ -d <span class="s1">'{"type": "in", "client_payment_id": "071c6d23-7508-4e35-ad92-852308a47689", "amount": 100, "card": 21}'</span>  
+ https://www.synq.ru/mserver2-dev/v1/payments
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pay"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237232</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47653"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">100.00</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T08:58:51.143Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<blockquote>
+<p>Платим:</p>
+</blockquote>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> X POST https://www.synq.ru/mserver2-dev/v1/payments/1401089237232/pay
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"next_action"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"get"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089237232</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"071c6d23-7508-4e35-ad92-852308a47653"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-01T12:04:49.330Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Получение-истории-платежей">Получение истории платежей</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password <span class="s2">"https://www.synq.ru/mserver2-dev/v1/payments?page=0&amp;size=35&amp;type=out,in&amp;status=completed,declined"</span>
+</pre>
+
+<p>Параметры <code class="prettyprint">page</code> и <code class="prettyprint">size</code> в запросе позволяют задать номер (начиная с 0) и размер страницы, которую запрашивает клиент. По умолчанию номер страницы - 0 и размер страницы - 35 платежей.
+Опциональные параметры <code class="prettyprint">type</code> и <code class="prettyprint">status</code> позволяют фильтровать платежи по типу и статусу.</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238188</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e131a7e2-c553-4295-867e-1023359bee31"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">5.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T16:08:56.536Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238187</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e731a7e2-c553-4295-867e-1023359bee31"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">5.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T16:05:40.110Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processed_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T16:07:41.435Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238186</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"1331a7e2-c553-4295-867e-1023359bee38"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T15:14:42.620Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"decline_reason"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"internal_error"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"1509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238185</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"1231a7e2-c553-4295-867e-1023359bee38"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T15:13:28.298Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"decline_reason"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"internal_error"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238184</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"1731a7e2-c553-4295-867e-1023359bee38"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T15:11:19.489Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238183</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e731a7e2-c553-4295-867e-1023359bee34"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T14:58:52.154Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238182</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e731a7e2-c553-4295-867e-1023359bee38"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T14:56:39.222Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"declined"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089238181</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"e731a7e2-c553-4295-867e-1023359bee28"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T14:25:44.646Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processed_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-08T14:26:55.029Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MTS Украина"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (9-10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"0509244604"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Уведомления-об-изменении-статуса-платежа">Уведомления об изменении статуса платежа</h2>
+
+<p>Для уведомления внешней системы об изменениях статуса платежа mserver выполняет POST запрос на URL указанный в настройках проекта. Уведомление передается в теле POST запроса в виде объекта платежной операции сериализованного в JSON. Например:</p>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-02T14:37:20.102Z"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"payment"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089240253</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"a02b1416-b9c1-4782-88c5-da4d78b32f8d"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-02T14:36:02.997Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processed_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-02T14:37:20.102Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"in"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ipsp_in"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ИПСП (агент)"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"card"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"used"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"from"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"to"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h3 id="Поля">Поля</h3>
+
+<ul>
+<li><code class="prettyprint">created_at</code> - момент времени совершения платежной операции</li>
+<li><code class="prettyprint">payment</code> - стандартное представление объекта платежа описанное выше</li>
+<li><code class="prettyprint">from</code> - начальный статус платежа</li>
+<li><code class="prettyprint">to</code> - конечный статус платежа</li>
+<li><code class="prettyprint">type</code> - тип платежной операции, см. ниже</li>
+</ul>
+
+<h3 id="Типы-платежных-операций">Типы платежных операций</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Тип</th>
+<th style="text-align: left">Описание</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">complete</code></td>
+<td style="text-align: left">Платеж проведен</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">decline</code></td>
+<td style="text-align: left">Платеж отклонен</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">undo</code></td>
+<td style="text-align: left">Отмена ранее успешного платежа (сторно)</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">redo</code></td>
+<td style="text-align: left">Ранее отмененный платеж сделан успешным (сторно сторно and we need to go deeper)</td>
+</tr>
+</tbody></table>
+
+<h1 id="Карты">Карты</h1>
+
+<p>Карта - это сохраненный в mserver токен, с помощью которого пользователь кошелька может пополнять счет без ввода данных пластиковой карты.</p>
+
+<h3 id="Поля">Поля</h3>
+
+<ul>
+<li><code class="prettyprint">id</code> - уникальный идентификатор карты</li>
+<li><code class="prettyprint">state</code> - состояние карты, см. ниже</li>
+<li><code class="prettyprint">title</code> - название карты, в качестве названия сейчас используется маскированный номер карты</li>
+<li><code class="prettyprint">type</code> - бренд карты: Visa/MasterCard/&hellip;</li>
+</ul>
+
+<h3 id="Состояния-карты">Состояния карты</h3>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Код состояния карты</th>
+<th style="text-align: left">Описание</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">created</code></td>
+<td style="text-align: left">Карта только что создана</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">pending</code></td>
+<td style="text-align: left">Карта сохраняется (ожидается уведомление от IPSP о успехе/неуспехе карточной транзакции</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">active</code></td>
+<td style="text-align: left">Карта сохранена, может быть использована для повторных платежей</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">failed</code></td>
+<td style="text-align: left">Карта не сохранена (и уже не будет)</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">used</code></td>
+<td style="text-align: left">Карта использована для однократного пополнения</td>
+</tr>
+</tbody></table>
+
+<h2 id="Создание-карты">Создание карты</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> -X POST https://www.synq.ru/mserver2-dev/v1/cards
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_page_url"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://test1.ipsp.com/frontend/endpoint?product_id=1721&amp;desc=mserver2&amp;payment_type=A&amp;amount=1.00&amp;currency=RUB&amp;biller_client_id=1f95c7b9-74e5-4fd7-983d-c8d03d90347e&amp;perspayee_expiry=0150&amp;recur_freq=1&amp;locale=ru&amp;hash=cace0d7de544a25d2aa685ef12263a10655d9058"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<p>далее следует перенаправить пользователя на платежную страницу по ссылке из поля <code class="prettyprint">payment_page_url</code>. После ввода пользователем данных карты на платежной странице  и получения mserver уведомления от IPSP об успехе или неуспехе карточной транзакции карта перейдет в состояние <code class="prettyprint">active</code> или <code class="prettyprint">failed</code>.</p>
+
+<h2 id="Загрузка-карты">Загрузка карты</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> https://www.synq.ru/mserver2-dev/v1/cards/62
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<p>Как видно, карта успешно сохранена и может быть использована для пополнения счета кошелька.</p>
+
+<h2 id="Получение-списка-карт">Получение списка карт</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> https://www.synq.ru/mserver2-dev/v1/cards
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"541715******2399"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"MasterCard"</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Удаление-карты">Удаление карты</h2>
+<pre class="highlight shell"><span class="gp">$ </span>сurl -u+79261111111:password -H <span class="s1">'Content-type:application/json'</span> 
+ -X DELETE https://www.synq.ru/mserver2-dev/v1/cards/62
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Данные-тестовых-карт">Данные тестовых карт</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Номер карты</th>
+<th style="text-align: left">Срок действия</th>
+<th style="text-align: right">CVV2/CVC2</th>
+<th style="text-align: center">3D-Secure</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">5417150970409149</td>
+<td style="text-align: left">11/14</td>
+<td style="text-align: right">402</td>
+<td style="text-align: center">&#x2713;</td>
+</tr>
+<tr>
+<td style="text-align: left">5417150774572399</td>
+<td style="text-align: left">11/14</td>
+<td style="text-align: right">759</td>
+<td style="text-align: center">&#x2717;</td>
+</tr>
+<tr>
+<td style="text-align: left">4652060320881342</td>
+<td style="text-align: left">11/14</td>
+<td style="text-align: right">470</td>
+<td style="text-align: center">&#x2713;</td>
+</tr>
+<tr>
+<td style="text-align: left">4652060779951539</td>
+<td style="text-align: left">11/14</td>
+<td style="text-align: right">774</td>
+<td style="text-align: center">&#x2717;</td>
+</tr>
+</tbody></table>
+
+<p>Пароль 3D-Secure: 123456.</p>
+
+          <h1 id="Административное-api">Административное API</h1>
+
+<h2 id="Аутентификация">Аутентификация</h2>
+
+<p>На тестовой системе созданы 2 пользователя от имени которых возможен вызов административного API.</p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">Логин</th>
+<th style="text-align: left">Пароль</th>
+<th style="text-align: left">Роли пользователя</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">user</td>
+<td style="text-align: left">user</td>
+<td style="text-align: left">user</td>
+</tr>
+<tr>
+<td style="text-align: left">admin</td>
+<td style="text-align: left">admin</td>
+<td style="text-align: left">admin</td>
+</tr>
+</tbody></table>
+
+<h2 id="Получение-всех-кошельков-проекта">Получение всех кошельков проекта</h2>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">page</code> - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0</li>
+<li><code class="prettyprint">size</code> - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35</li>
+<li><code class="prettyprint">sort</code> - поле для сортировки. Можно указать несколько полей через запятую, например: <code class="prettyprint">amount,createdAt</code>. Можно указать направление через запятую, например: <code class="prettyprint">amount,desc</code></li>
+</ul>
+
+<h3 id="Поля-для-сортировки:">Поля для сортировки:</h3>
+
+<ul>
+<li><code class="prettyprint">paymentCount</code> - по количеству платежей </li>
+<li><code class="prettyprint">turnover</code> - по обороту </li>
+<li><code class="prettyprint">activeCardCount</code> - по количеству привязанных карт </li>
+<li><code class="prettyprint">totalCardCount</code> - по количеству привязанных карт (с уже удаленными) </li>
+<li><code class="prettyprint">createdAt</code> - по дате регистрации</li>
+<li><code class="prettyprint">amount</code> - по остаткам</li>
+</ul>
+
+<h3 id="Фильтры:">Фильтры:</h3>
+
+<ul>
+<li><code class="prettyprint">ipAddress</code> - по ip адресу</li>
+<li><code class="prettyprint">givenName</code> <code class="prettyprint">familyName</code> <code class="prettyprint">patronymicName</code> - по ФИО, поиск полного совпадения или совпадения в начале</li>
+<li><code class="prettyprint">phone</code> - по номеру телефона, поиск полного совпадения или совпадения в начале</li>
+<li><code class="prettyprint">cardNumber</code> - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера</li>
+<li><code class="prettyprint">active</code> - по статусу активации (true|false)</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uadmin:admin <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets?familyName=арсен&amp;active=true&amp;sort=paymentCount,desc"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+380503839001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">8598.17</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"role"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-20T15:10:25.943Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_month_payments_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">134</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"turnover"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">1401.84</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">197</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active_card_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total_card_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+12345675578"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Алексей Арсеньев"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"role"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-05T13:42:34.745Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"last_month_payments_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"turnover"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active_card_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total_card_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Загрузка-кошелька">Загрузка кошелька</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+79260000006"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">65572.14</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"reset_password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Блокировка-кошелька">Блокировка кошелька</h2>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">message</code> - сообщение для пользователя кошелька, объясняющее причину блокировки и как дальше жить</li>
+<li><code class="prettyprint">reason</code> - сообщение для сотрудников проекта о причине блокировки (не видно клиенту)</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user  -H <span class="s1">'Content-type:application/json'</span> --data <span class="s1">'{"message": "Заблокирован до выяснения.", "reason": "Клиент - кардер." }'</span> <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/disable"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+12345657367"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"reset_password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lock_message"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Заблокироваан до выяснения."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lock_reason"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Клиент - кардер."</span><span class="w">
+    </span><span class="s2">"locked_at"</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="s2">"2014-08-14T16:46:42.122Z"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Разблокировка-кошелька">Разблокировка кошелька</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user -X POST <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/enable"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"phone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"+12345657367"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"reset_password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"verified"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"active"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Получение-платежей-кошелька">Получение платежей кошелька</h2>
+
+<h3 id="Параметры">Параметры</h3>
+
+<ul>
+<li><code class="prettyprint">wallet</code> - обязательный параметр, телефон кошелька чьи платежи мы хотим видеть</li>
+<li><code class="prettyprint">type</code> - фильтр по типу платежа, допускается указание нескольких значений разделенный запятыми, опционально</li>
+<li><code class="prettyprint">status</code>- фильтр по статусу платежа, допускается указание нескольких значений разделенный запятыми, опционально</li>
+<li><code class="prettyprint">service</code> - идентификатор сервиса, опционально</li>
+<li><code class="prettyprint">amount_from</code>и <code class="prettyprint">amount_to</code> - границы диапазона сумм платежей, опционально</li>
+<li><code class="prettyprint">date_from</code> и <code class="prettyprint">date_to</code> - границы диапазона дат создания платежей, опционально</li>
+<li><code class="prettyprint">page</code> - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0</li>
+<li><code class="prettyprint">size</code> - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35</li>
+</ul>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/payments?type=out&amp;status=created&amp;amount_from=0.5&amp;amount_to=1&amp;date_from=2014-08-01T12:10:15.525Z&amp;date_to=2014-08-11T00:00:00.00Z&amp;service=1"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1401089240212</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"client_payment_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"c131a7e2-c553-4295-867e-1023359bee28"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"total"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">4.01</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created_at"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-08-01T12:20:15.525Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"created"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"out"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"service"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Мегафон"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"parameters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"phoneNumber"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"№ телефона (10 цифр)"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"9157101280"</span><span class="w">
+    </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"outbound"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"tpr_out"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО ТПР (провайдер)"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Отчет-об-обороте-кошелька-по-дням">Отчет об обороте кошелька по дням</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?from=2014-05-01&amp;to=2014-06-03"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-06-01"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">125477.16</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-06-02"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-06-03"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
+
+<h2 id="Отчет-об-остатке-кошелька-по-дням">Отчет об остатке кошелька по дням</h2>
+<pre class="highlight shell"><span class="gp">$ </span>curl -uuser:user <span class="s2">"https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/balance?from=2014-07-11&amp;to=2014-07-13"</span>
+</pre>
+<pre class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"meta"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-11"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">55572.14</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-12"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">55572.14</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"tick"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-07-13"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">55572.14</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre>
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
-          </div>
       </div>
     </div>
   </body>
