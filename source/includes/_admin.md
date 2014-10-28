@@ -1,4 +1,4 @@
-﻿# Административное API
+﻿﻿# Административное API
 
 
 ## Аутентификация
@@ -84,25 +84,28 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : {
-    "phone" : "+79260000006",
-    "amount" : 65572.14,
-    "verified" : false,
-    "enabled" : true,
-    "active" : true,
-    "role" : "user",
-    "created_at" : "2014-06-01T12:43:52.876Z",
-    "in_monthly_turnover_limit" : 40000,
-    "out_monthly_turnover_limit" : 40000,
-    "in_amount_limit" : 15000,
-    "out_amount_limit" : 15000,
-    "wallet_amount_limit" : 15000,
-    "in_monthly_turnover" : 0,
-    "out_monthly_turnover" : 0
-  }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "phone":"+79260000006",
+      "amount":65572.14,
+      "verified":false,
+      "enabled":true,
+      "active":true,
+      "role":"user",
+      "created_at":"2014-06-01T12:43:52.876Z",
+      "limits":{
+         "in_amount_limit":15000,
+         "out_amount_limit":15000,
+         "wallet_amount_limit":15000,
+         "in_monthly_turnover_limit":40000,
+         "out_monthly_turnover_limit":40000,
+         "active_cards_limit":10
+      },
+      "in_last_month_turnover":0,
+      "out_last_month_turnover":0
+   }
 }
 ```
 
@@ -255,7 +258,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ## Удаление кошелька
 
-*Команда работает только на dev сервере.*
+<aside class="warning">Команда работает только на dev сервере</aside>
 
 ```shell
 $ curl -uuser:user -X DELETE https://www.synq.ru/mserver2-dev/admin/wallets/+79260000006
@@ -266,5 +269,41 @@ $ curl -uuser:user -X DELETE https://www.synq.ru/mserver2-dev/admin/wallets/+792
   "meta" : {
     "code" : 200
   }
+}
+```
+
+## Изменение статуса персональных данных
+
+### Параметры
+
+* `wallet` - номер телефона в международном формате
+* `statue` - `DATA_ENTERED | DATA_VERIFIED` статус персональных данных
+
+```shell
+$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "DATA_VERIFIED"}' "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/update_status" 
+```
+
+> Результат содержит `"status": "data_verified", "verified_at": "2014-10-22T10:26:12.035Z"`
+
+```json
+{
+    "meta": {
+        "code": 200
+    },
+    "data": {
+        "family_name": "Иванов",
+        "given_name": "Иван",
+        "patronymic_name": "Иванович",
+        "passport_series_number": "1122334455",
+        "passport_issued_at": "2012-12-20",
+        "itn": "330500938709",
+        "ssn": "11223344595",
+        "status": "data_verified",
+        "verified_at": "2014-10-22T10:26:12.035Z",
+        "changed_at": "2014-10-22T10:26:10.604Z",
+        "wallet": {
+            "phone": "+380935895452"
+        }
+    }
 }
 ```
