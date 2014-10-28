@@ -8,5 +8,4 @@ module RedcarpetHeaderFix
 end
 
 require 'middleman-core/renderers/redcarpet'
-# fix for https://github.com/tripit/slate/issues/111
-#Middleman::Renderers::MiddlemanRedcarpetHTML.send :include, RedcarpetHeaderFix
+Middleman::Renderers::MiddlemanRedcarpetHTML.send :include, RedcarpetHeaderFix
