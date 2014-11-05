@@ -111,7 +111,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
-## Получения кода активации кошнлька
+## Получение кода активации кошнлька
 
 Формат кода: `check_digit` + `6 random_numbers`, в сумме 7 знаков.
 
@@ -281,13 +281,13 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ## Получение списка персональных данных
 
-Информация выдаётся постранично 
+Информация выдаётся постранично. 
 
 ### Параметры постраничного запроса
 
-`page` - Номер страници начиная с 0
-`size` - Размер страници
-`sort` - Сортировка по полю, имя поля указывается в camelCase стиле, после запятой может следовать направление сортировки 
+`page` - номер страницы начиная с 0
+`size` - размер страницы
+`sort` - сортировка по полю, имя поля указывается в camelCase стиле, после запятой может следовать направление сортировки 
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2&sort=givenName,desc
@@ -328,22 +328,6 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 }
 ```
 
-## Удаление кошелька
-
-<aside class="warning">Команда работает только на dev сервере</aside>
-
-```shell
-$ curl -uuser:user -X DELETE https://www.synq.ru/mserver2-dev/admin/wallets/+79260000006
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200
-  }
-}
-```
-
 ## Изменение статуса персональных данных
 
 ### Параметры
@@ -377,5 +361,21 @@ $ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_veri
             "phone": "+380935895452"
         }
     }
+}
+```
+
+## Удаление кошелька
+
+<aside class="warning">Команда работает только на dev сервере</aside>
+
+```shell
+$ curl -uuser:user -X DELETE https://www.synq.ru/mserver2-dev/admin/wallets/+79260000006
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  }
 }
 ```
