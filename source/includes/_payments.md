@@ -85,7 +85,11 @@ $ curl -u+79261111111:password "https://www.synq.ru/mserver2-dev/v1/payments?pag
 {
   "meta" : {
     "total_elements" : 15,
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : [ {
     "id" : 1401089238188,

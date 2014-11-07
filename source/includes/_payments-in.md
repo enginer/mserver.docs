@@ -28,7 +28,10 @@ $ curl -u+79261111111:password -H 'Content-type:application/json'
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "pay"
+    "next_action" : "pay",
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : {
     "id" : 1401089237212,
@@ -61,7 +64,11 @@ $curl -u+79261111111:password -H 'Content-type:application/json'
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "get"
+    "next_action" : "get",
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237212,
@@ -98,7 +105,11 @@ $ curl -u+79261111111:password -H 'Content-type:application/json'
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "pay"
+    "next_action" : "pay",
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237231,
@@ -132,7 +143,11 @@ $ curl -u+79261111111:password-H 'Content-type:application/json'
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "get"
+    "next_action" : "get",
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237231,
@@ -167,7 +182,11 @@ $ curl -u+79261111111:passwordhttps://www.synq.ru/mserver2-dev/v1/payments/14010
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237231,
@@ -209,7 +228,11 @@ $ curl -u+79261111111:password-H 'Content-type:application/json'
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "pay"
+    "next_action" : "pay",
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237232,
@@ -244,7 +267,11 @@ $ curl -u+79261111111:password -H 'Content-type:application/json' X POST https:/
 {
   "meta" : {
     "code" : 200,
-    "next_action" : "get"
+    "next_action" : "get",
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1401089237232,

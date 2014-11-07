@@ -47,7 +47,11 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services?size
  {
    "meta" : {
      "total_elements" : 23,
-     "code" : 200
+     "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
    },
    "data" : [ {
      "id" : 9,
@@ -85,7 +89,11 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/1
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : {
     "id" : 1,
@@ -117,7 +125,11 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/grou
 {
   "meta" : {
     "total_elements" : 23,
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : [ {
     "code" : "bank",
@@ -173,7 +185,11 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/sear
 ```json
 {
    "meta":{
-      "code":200
+      "code":200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
    },
    "data":[
       {
