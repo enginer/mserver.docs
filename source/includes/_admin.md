@@ -327,7 +327,9 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B38
 ```json
 {
   "meta" : {
-    "total_elements" : 2,
+    "page" : {
+      "total_elements" : 2
+    },
     "code" : 200
   },
   "data" : [ {
