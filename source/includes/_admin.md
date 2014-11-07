@@ -42,7 +42,9 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
 ```json
 {
   "meta" : {
-    "total_elements": 4,
+    "page" : {
+      "total_elements" : 4
+    },
     "code" : 200
   },
   "data" : [ {
@@ -111,9 +113,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
-## Получение кода активации кошнлька
-
-Формат кода: `check_digit` + `6 random_numbers`, в сумме 7 знаков.
+## Получение кода активации кошелька
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/secure_code"
@@ -200,7 +200,9 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 ```json
 {
   "meta" : {
-    "total_elements" : 1,
+    "page" : {
+      "total_elements" : 1
+    },
     "code" : 200
   },
   "data" : [ {
@@ -296,7 +298,9 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 ```json
 {
   "meta" : {
-    "total_elements" : 6,
+    "page" : {
+      "total_elements" : 6
+    },
     "code" : 200
   },
   "data" : [ {
