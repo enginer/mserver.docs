@@ -257,6 +257,185 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
+## Получение отчёта по платежам
+
+### Параметры
+
+Все параметры опциональны
+
+* `wallet` - телефон кошелька чьи платежи мы хотим видеть
+* `type` - тип платежа
+* `status`- статус платежа
+* `service_name` - полное или частичное имя сервиса
+* `amount_from` и `amount_to` - границы диапазона сумм платежей
+* `date_from` и `date_to` - границы диапазона дат создания платежей
+* `ipsp_payment_id` - идентификатор платежа из IPSP
+* `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
+* `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
+* `sort` - поле сортировки через запятую может следовать направлене
+
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&sort=amount,desc&size=1"
+```
+
+```json
+{
+  "meta" : {
+    "total_elements" : 14,
+    "code" : 200
+  },
+  "data" : [ {
+    "id" : 1401089244704,
+    "client_payment_id" : "409c1e06-5faa-11e4-a61c-b88d12284ddc",
+    "amount" : 12000,
+    "total" : 12070,
+    "created_at" : "2014-10-29T20:29:16.495Z",
+    "status" : "created",
+    "type" : "out",
+    "service" : {
+      "id" : 15,
+      "name" : "MTS Украина"
+    },
+    "parameters" : [ {
+      "code" : "phoneNumber",
+      "name" : "№ телефона (9-10 цифр)",
+      "value" : "0509244512"
+    } ],
+    "outbound" : {
+      "id" : 35,
+      "code" : "tpr_out",
+      "name" : "ООО ТПР (провайдер)"
+    },
+    "wallet" : {
+      "phone" : "+79270000001",
+      "amount" : 8496.32,
+      "verified" : false,
+      "ip" : "37.110.42.197"
+    }
+  } ]
+}
+```
+
+> Пример фильра по кошельку и IP
+
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B380935895452&payment_ip=127.0.0.1&size=1"
+```
+
+```json
+{
+  "meta" : {
+    "total_elements" : 2,
+    "code" : 200
+  },
+  "data" : [ {
+    "id" : 1401089245266,
+    "client_payment_id" : "96c280f4-8e2b-40a1-b250-806bb4a4b9f1",
+    "amount" : 10000,
+    "total" : 10000,
+    "created_at" : "2014-11-04T13:02:09.409Z",
+    "processed_at" : "2014-11-04T13:02:13.619Z",
+    "status" : "completed",
+    "type" : "p2p",
+    "wallet" : {
+      "phone" : "+380935895452",
+      "amount" : 0,
+      "name" : "Иван Иванов",
+      "verified" : true,
+      "ip" : "127.0.0.1"
+    },
+    "destination" : {
+      "phone" : "+79555555555"
+    },
+    "direction" : "out",
+    "payment_ip" : "127.0.0.1"
+  } ]
+}
+```
+
+> Пример фильра ipsp_payment_id
+
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment_id=6143708"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "page" : {
+      "total_elements" : 1
+    }
+  },
+  "data" : [ {
+    "id" : 1401089245752,
+    "client_payment_id" : "6ea16c52-669e-11e4-86b1-3c07542cf2f2",
+    "amount" : 42,
+    "total" : 42,
+    "created_at" : "2014-11-07T16:52:17.990Z",
+    "processed_at" : "2014-11-07T16:52:21.791Z",
+    "status" : "completed",
+    "type" : "in",
+    "inbound" : {
+      "id" : 62,
+      "code" : "ipsp_in",
+      "name" : "ÐžÐžÐž Ð˜ÐŸÐ¡ÐŸ (Ð°Ð³ÐµÐ½Ñ‚)"
+    },
+    "card" : {
+      "state" : "used",
+      "title" : "541715******2399",
+      "type" : "MasterCard"
+    },
+    "wallet" : {
+      "phone" : "+79270000001",
+      "amount" : 7462.54,
+      "level" : "anonymous",
+      "name" : "ÐŸÐ¸ÑÑ‡Ð¿Ð¸Ð¹ ÐœÐ±Ð°Ð½ÐºÐ¾Ð²",
+      "verified" : true,
+      "person_status" : "data_verified",
+      "enabled" : true,
+      "active" : true,
+      "role" : "user",
+      "created_at" : "2014-10-29T16:33:14.045Z"
+    },
+    "payment_ip" : "81.95.134.13",
+    "card_payment" : {
+      "amount" : 4200,
+      "ipsp_payment_id" : 1401089245752,
+      "type" : "SALE",
+      "date" : "2014-11-07T16:52:19.804Z",
+      "product_id" : 1721,
+      "currency" : "RUB",
+      "card_holder_name" : "TESTER TESTEROV",
+      "exp_year" : 2014,
+      "exp_month" : 11,
+      "remote_ip" : "81.95.134.13",
+      "user_ip" : "81.95.134.13",
+      "card_number_mask" : "541715******2399",
+      "card_type" : "MASTER_CARD",
+      "recurring" : false,
+      "steps" : [ {
+        "date" : "2014-11-07T16:52:19.867Z",
+        "status" : "PASSED_0",
+        "type" : "ANTIFRAUD"
+      }, {
+        "eci" : "06",
+        "date" : "2014-11-07T16:52:21.571Z",
+        "status" : "PASSED_0",
+        "type" : "BANK",
+        "auth_id_response" : "411421",
+        "date_local_trans" : "2014-11-07T13:52:21.000Z",
+        "response_code" : "APPROVED_00"
+      }, {
+        "date" : "2014-11-07T16:52:19.843Z",
+        "status" : "PASSED_0",
+        "type" : "PAYMENT_INPUT"
+      } ]
+    }
+  } ]
+}
+```
+
 ## Отчет об остатке кошелька по дням
 
 ```shell
