@@ -7,13 +7,18 @@
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : {    
     "phone" : "+79261111111",    
     "amount" : 0,
+    "level" : "anonymous",
     "name" : "Алексей Арсеньев",
-    "verified" : false
+    "verified" : false,
+    "person_status" : "data_entered"
   }
 }
 ```
@@ -24,6 +29,8 @@
 * `amount` - остаток на счете кошелька, в рублях
 * `name` - имя конечного пользователя, возвращается в случае, если были заданы имя и/или фамилия
 * `verified` - `true`|`false` статус идентификации пользователя
+* `level` - `anonymous` | `identified` | `personified` уровень идентификации пользователя
+* `person_status` - `no_data` | `data_entered` | `data_verified` статус персональных данных пользователя
 
 ## Создание кошелька
 
@@ -215,7 +222,10 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : {    
     "phone" : "+79261111111",
@@ -238,7 +248,10 @@ https://www.synq.ru/mserver2-dev/v1/wallet/find
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : [ {
     "phone" : "+79260000001"
@@ -259,7 +272,8 @@ $ curl -u+79261111111:password -X DELETE https://www.synq.ru/mserver2-dev/v1/wal
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : { }
   }
 }
 ```
@@ -287,7 +301,10 @@ https://www.synq.ru/mserver2-dev/v1/wallet/person
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : {
     "family_name" : "Арсеньев",
@@ -320,7 +337,10 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet/person
 ```json
 {
   "meta" : {
-    "code" : 200
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
   },
   "data" : {
     "family_name" : "Арсеньев",

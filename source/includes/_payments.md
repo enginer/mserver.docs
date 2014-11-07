@@ -1,4 +1,4 @@
-﻿﻿# Платежи
+﻿# Платежи
 
 Платеж - это операция движения денежных средств между счетами mserver выполняемая по распоряжению пользователя. Платежи различаются по типу:
 
@@ -84,8 +84,14 @@ $ curl -u+79261111111:password "https://www.synq.ru/mserver2-dev/v1/payments?pag
 ```json
 {
   "meta" : {
-    "total_elements" : 15,
-    "code" : 200
+    "page" : {
+      "total_elements" : 15
+    },
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10010
+    }
+
   },
   "data" : [ {
     "id" : 1401089238188,

@@ -23,7 +23,7 @@
 
 ### Коды ошибок
 
-* `active_cards_limit` - превишено максимально возможное количество активных карт
+* `active_cards_limit` - превышено максимально возможное количество активных карт
 
 ```shell
 $ curl -u+79261111111:password -H 'Content-type:application/json' -X POST https://www.synq.ru/mserver2-dev/v1/cards
@@ -75,7 +75,9 @@ $ curl -u+79261111111:password -H 'Content-type:application/json' https://www.sy
 ```json
 {
   "meta" : {
-    "total_elements" : 1,
+  "page" : {
+      "total_elements" : 1
+    },
     "code" : 200
   },
   "data" : [ {
