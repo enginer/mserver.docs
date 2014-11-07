@@ -263,7 +263,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 Все параметры опциональны
 
-* `wallet` - телефон кошелька чьи платежи мы хотим видеть
+* `wallet` - телефон кошелька, чьи платежи мы хотим видеть
 * `type` - тип платежа
 * `status`- статус платежа
 * `service_name` - полное или частичное имя сервиса
@@ -281,7 +281,9 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name
 ```json
 {
   "meta" : {
-    "total_elements" : 14,
+    "page" : {
+      "total_elements" : 14
+    },
     "code" : 200
   },
   "data" : [ {
@@ -316,7 +318,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name
 }
 ```
 
-> Пример фильра по кошельку и IP
+> Пример фильтра по кошельку и IP
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B380935895452&payment_ip=127.0.0.1&size=1"
@@ -353,7 +355,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B38
 }
 ```
 
-> Пример фильра ipsp_payment_id
+> Пример фильтра по ipsp_payment_id
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment_id=6143708"
@@ -379,7 +381,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment
     "inbound" : {
       "id" : 62,
       "code" : "ipsp_in",
-      "name" : "ÐžÐžÐž Ð˜ÐŸÐ¡ÐŸ (Ð°Ð³ÐµÐ½Ñ‚)"
+      "name" : "ООО ИПСП (агент)"
     },
     "card" : {
       "state" : "used",
@@ -390,7 +392,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment
       "phone" : "+79270000001",
       "amount" : 7462.54,
       "level" : "anonymous",
-      "name" : "ÐŸÐ¸ÑÑ‡Ð¿Ð¸Ð¹ ÐœÐ±Ð°Ð½ÐºÐ¾Ð²",
+      "name" : "Пиэчпий Мбанков",
       "verified" : true,
       "person_status" : "data_verified",
       "enabled" : true,
