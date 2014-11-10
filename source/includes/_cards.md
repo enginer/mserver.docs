@@ -37,8 +37,7 @@ $ curl -u+79261111111:password -H 'Content-type:application/json' -X POST https:
   "data" : {
     "id" : 62,
     "state" : "pending",
-    "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=A&amount=1.00&currency=RUB&biller_client_id=1f95c7b9-74e5-4fd7-983d-c8d03d90347e&perspayee_expiry=0150&recur_freq=1&locale=ru&hash=cace0d7de544a25d2aa685ef12263a10655d9058",
-    "payment_token": "0000012aed5ac313f64a708a65fd0e875f60bc1415634865334311dd49178aff439f4b42c6ae628854e71385dc87eb9ae5cb5633ce1ee7221668ec4e90a7a3dcd676ace6b298874e85cb52556b1265d1247dfb0e1c529fd11b0551219f39a6ef296298c1488f3b0ba5cf8d9f8c8af528ffe3aef3a59325e38d07ade2dadef479ca3f4522cc6285ca285e37a63df687ce8ec06a416d78d11fcd7"
+    "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=A&amount=1.00&currency=RUB&biller_client_id=1f95c7b9-74e5-4fd7-983d-c8d03d90347e&perspayee_expiry=0150&recur_freq=1&locale=ru&hash=cace0d7de544a25d2aa685ef12263a10655d9058"
   }
 }
 ```

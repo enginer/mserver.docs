@@ -85,8 +85,7 @@ $curl -u+79261111111:password -H 'Content-type:application/json'
     },
     "card" : {
       "state" : "pending",
-      "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=S&amount=100.00&currency=RUB&cf=1401089237212&locale=ru&hash=3d49fa2b7ceb67f8ad7ed7f2247dd2cad1c4acdc",
-      "payment_token": "0000012aed5ac313f64a708a65fd0e875f60bc1415634865334311dd49178aff439f4b42c6ae628854e71385dc87eb9ae5cb5633ce1ee7221668ec4e90a7a3dcd676ace6b298874e85cb52556b1265d1247dfb0e1c529fd11b0551219f39a6ef296298c1488f3b0ba5cf8d9f8c8af528ffe3aef3a59325e38d07ade2dadef479ca3f4522cc6285ca285e37a63df687ce8ec06a416d78d11fcd7"
+      "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=S&amount=100.00&currency=RUB&cf=1401089237212&locale=ru&hash=3d49fa2b7ceb67f8ad7ed7f2247dd2cad1c4acdc"
     }
   }
 }
@@ -166,8 +165,7 @@ $ curl -u+79261111111:password-H 'Content-type:application/json'
     "card" : {
       "id" : 21,
       "state" : "pending",
-      "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=S&amount=100.00&currency=RUB&cf=1401089237231&locale=ru&biller_client_id=21&perspayee_expiry=0150&recur_freq=1&hash=5136f2cb7fd77f98b1df86d4644338e5a10dab98",
-      "payment_token": "0000012aed5ac313f64a708a65fd0e875f60bc1415634865334311dd49178aff439f4b42c6ae628854e71385dc87eb9ae5cb5633ce1ee7221668ec4e90a7a3dcd676ace6b298874e85cb52556b1265d1247dfb0e1c529fd11b0551219f39a6ef296298c1488f3b0ba5cf8d9f8c8af528ffe3aef3a59325e38d07ade2dadef479ca3f4522cc6285ca285e37a63df687ce8ec06a416d78d11fcd7"
+      "payment_page_url" : "https://test1.ipsp.com/frontend/endpoint?product_id=1721&desc=mserver2&payment_type=S&amount=100.00&currency=RUB&cf=1401089237231&locale=ru&biller_client_id=21&perspayee_expiry=0150&recur_freq=1&hash=5136f2cb7fd77f98b1df86d4644338e5a10dab98"
     }
   }
 }
