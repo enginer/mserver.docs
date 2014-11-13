@@ -177,42 +177,34 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/sear
 > Пример поиска по номеру телефона
  
 ```shell
-$ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/services/search?type=phone&input=9267101280
+$ curl -u+79261111111:password "https://www.synq.ru/mserver2-dev/v1/services/search?type=phone&input=9099560000" 
 ```
 
 > Пример возвращаемых данных
 
 ```json
 {
-   "meta":{
-      "code":200,
+  "meta" : {
+    "code" : 200,
     "urgent_data" : {
-      "amount" : 10010
+      "amount" : 10000
     }
-
-   },
-   "data":[
-      {
-         "id":1,
-         "name":"Мегафон",
-         "min":1,
-         "max":15000,
-         "verification_required":false,
-         "parameters":[
-            {
-               "code":"phoneNumber",
-               "min_length":10,
-               "max_length":10,
-               "name":"№ телефона (10 цифр)",
-               "pattern":"^9\\d{9}$",
-               "type":"numeric",
-               "pattern_description":"№ телефона (10 цифр)",
-               "items":[
-
-               ]
-            }
-         ]
-      }
-   ]
+  },
+  "data" : [ {
+    "id" : 3,
+    "name" : "Билайн",
+    "min" : 2,
+    "max" : 15000,
+    "verification_required" : false,
+    "parameters" : [ {
+      "code" : "phoneNumber",
+      "min_length" : 10,
+      "max_length" : 10,
+      "name" : "Номер телефона",
+      "type" : "numeric",
+      "pattern_description" : "10-ти значный федеральный номер",
+      "items" : [ ]
+    } ]
+  } ]
 }
 ```
