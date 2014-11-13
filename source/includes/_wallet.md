@@ -231,8 +231,9 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet
     "phone" : "+79261111111",
     "amount" : 0,
     "name" : "Алексей Арсеньев",
-    "verified" : false,
-    "reset_password" : false
+    "verified" : false,    
+    "level" : "anonymous",
+    "person_status" : "data_entered"
   }
 }
 ```
