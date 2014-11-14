@@ -262,23 +262,6 @@ https://www.synq.ru/mserver2-dev/v1/wallet/find
 }
 ```
 
-## Удаление кошелька
-
-<aside class="notice">Команда работает только на dev сервере.</aside>
-
-```shell
-$ curl -u+79261111111:password -X DELETE https://www.synq.ru/mserver2-dev/v1/wallet
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200,
-    "urgent_data" : { }
-  }
-}
-```
-
 ## Задание персональных данных пользователя
 
 ### Параметры
