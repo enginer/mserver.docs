@@ -10,6 +10,7 @@ includes:
   - services
   - payments
   - payments-out
+  - payments-inout
   - payments-p2p
   - payments-in
   - cards
