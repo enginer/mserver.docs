@@ -86,17 +86,26 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
   "data" : [ {
     "phone" : "+380503839001",
     "amount" : 8598.17,
-    "name" : "Алексей Арсеньев",
-    "verified" : false,
     "enabled" : true,
     "active" : true,
     "role" : "user",
     "created_at" : "2014-08-20T15:10:25.943Z",
+    "person" : {
+    	"family_name" : "Арсеньев",
+    	"given_name" : "Алексей",
+    	"patronymic_name" : "Александрович",
+    	"passport_series_number" : "2202655885",
+    	"passport_issued_at" : "2012-02-27",
+    	"itn" : "330500938709",                       
+    	"ssn" : "11223344595",                        
+    	"status" : "data_entered"
+    },
+    "last_month_turnover" : 100.1,
     "last_month_payments_count" : 134,
     "turnover" : 1401.84,
-    "payment_count" : 197,
-    "active_card_count" : 0,
-    "total_card_count" : 0
+    "payments_count" : 197,
+    "active_cards_count" : 0,
+    "cards_count" : 0
   }, {
     "phone" : "+12345675578",
     "amount" : 10000,
