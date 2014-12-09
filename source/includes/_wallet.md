@@ -269,6 +269,7 @@ https://www.synq.ru/mserver2-dev/v1/wallet/find
 * `family_name` - фамилия
 * `given_name` - имя
 * `patronymic_name` - отчество
+* `birth_date` - дата рождения в формате гггг-мм-дд 
 * `passport_series_number` - серия и номер паспорта, 10 цифр
 * `passport_issued_at` - дата в формате гггг-мм-дд
 * `itn` - ИНН, 12 цифр
@@ -277,7 +278,7 @@ https://www.synq.ru/mserver2-dev/v1/wallet/find
 ```shell
 $ curl -u+79261111111:password -H 'Content-type:application/json' 
 -d '{"family_name": "Арсеньев", "given_name": "Алексей", "patronymic_name": "Александрович", 
-"passport_series_number": "2202655885", "passport_issued_at" : "2012-02-27", 
+"birth_date": "1982-01-02", "passport_series_number": "2202655885", "passport_issued_at" : "2012-02-27", 
 "itn": "330500938709", "ssn": "11223344595"}'  
 https://www.synq.ru/mserver2-dev/v1/wallet/person
 ```
@@ -294,6 +295,7 @@ https://www.synq.ru/mserver2-dev/v1/wallet/person
     "family_name" : "Арсеньев",
     "given_name" : "Алексей",
     "patronymic_name" : "Александрович",
+    "birth_date" : "1982-01-02",
     "passport_series_number" : "2202655885",
     "passport_issued_at" : "2012-02-27",
     "itn" : "330500938709",                       
@@ -330,6 +332,7 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet/person
     "family_name" : "Арсеньев",
     "given_name" : "Алексей",
     "patronymic_name" : "Александрович",
+    "birth_date" : "1982-01-02",
     "passport_series_number" : "2202655885",
     "passport_issued_at" : "2012-02-27",
     "itn" : "330500938709",
