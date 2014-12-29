@@ -58,10 +58,7 @@
 
 ### Поля для сортировки:
 
-- `payments_count` - по количеству платежей 
-- `turnover` - по обороту 
-- `active_card_count` - по количеству привязанных карт 
-- `total_card_count` - по количеству привязанных карт (с уже удаленными) 
+- `statistics.*.*` - по любому полю со статистики
 - `created_at` - по дате регистрации
 - `amount` - по остаткам
 
@@ -204,13 +201,24 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
 - `role`
 - `created_at`
 - `person:{...}`
-- 
-- `turnover`
-- `last_month_turnover`
-- `payments_count`
-- `last_month_payments_count`
-- `active_cards_count`
-- `cards_count`
+- `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
+- `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
+- `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
+- `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
+- `statistics.payments.lifetime.count` - количество транзакций за все время
+- `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
+- `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
+- `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
+- `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
+- `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
+- `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
+- `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
+- `statistics.payments.last_month.count` - количество транзакций за последний месяц
+- `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
+- `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
+- `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
+- `statistics.cards.count` - количество привязанных и удаленных карт
+- `statistics.cards.active_count` - количество привязанных активных карт
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006"
@@ -218,45 +226,69 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-   "meta":{
-      "code":200
-   },
-   "data":{
-      "phone":"+79260000006",
-      "amount":65572.14,
-      "enabled":true,
-      "active":true,
-      "role":"user",
-      "created_at":"2014-06-01T12:43:52.876Z",
-      "person" : {
-      	"family_name" : "Арсеньев",
-      	"given_name" : "Алексей",
-      	"patronymic_name" : "Александрович",
-      	"passport_series_number" : "2202655885",
-      	"passport_issued_at" : "2012-02-27",
-      	"itn" : "330500938709",                       
-      	"ssn" : "11223344595",                        
-      	"status" : "data_entered"
+  "meta":{
+    "code": 200
+  },
+  "data":{
+    "phone":"+79260000006",
+    "amount":65572.14,
+    "enabled":true,
+    "active":true,
+    "role":"user",
+    "created_at":"2014-06-01T12:43:52.876Z",
+    "person" : {
+      "family_name" : "Арсеньев",
+      "given_name" : "Алексей",
+      "patronymic_name" : "Александрович",
+      "passport_series_number" : "2202655885",
+      "passport_issued_at" : "2012-02-27",
+      "itn" : "330500938709",                       
+      "ssn" : "11223344595",                        
+      "status" : "data_entered"
+    },
+    "limits":{
+      "in_amount_limit":15000,
+      "out_amount_limit":15000,
+      "wallet_amount_limit":15000,
+      "monthly_in_turnover_limit":40000,
+      "monthly_out_turnover_limit":40000,
+      "monthly_p2p_turnover_limit":40000,
+      "active_cards_limit":10,
+
+      "in_amount_limit_available":15000,
+      "out_amount_limit_available":15000,
+      "wallet_amount_limit_available":15000,
+      "active_cards_limit_available": 10
+    },
+    "statistics": {
+      "payments": {
+        "lifetime": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        },
+        "last_month": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        }
       },
-      "limits":{
-         "in_amount_limit":15000,
-         "out_amount_limit":15000,
-         "wallet_amount_limit":15000,
-         "monthly_in_turnover_limit":40000,
-         "monthly_out_turnover_limit":40000,
-         "monthly_p2p_turnover_limit":40000,
-         "active_cards_limit":10,
-         
-         "in_amount_limit_available":15000,
-         "out_amount_limit_available":15000,
-         "wallet_amount_limit_available":15000,
-         "active_cards_limit_available": 10
-      },
-      "in_last_month_turnover":0,
-      "out_last_month_turnover":0,
-      "lifetime_payments_turnover": 1500,
-      "lifetime_payments_count": 20
-   }
+      "cards": {
+        "count": 4,
+        "active_count": 2
+      }
+    }
+  }
 }
 ```
 
