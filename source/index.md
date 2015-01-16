@@ -6,6 +6,7 @@ toc_footers:
 
 includes:
   - intro
+  - oauth  
   - wallet
   - services
   - payments

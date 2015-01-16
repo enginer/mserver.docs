@@ -5,7 +5,7 @@ API mserver использует подход [REST](http://wikipedia.org/wiki/R
 
 ## Аутентификация
 
-Используется [BASIC аутентификация](http://wikipedia.org/wiki/Basic_access_authentication). В качестве логина используется номер телефона Кошелька в международном формате. Клиент может выполнять аутентификацию 1 раз за сессию, передавая в последующих запросах токен в куке `JSESSONID`. 
+Используется [BASIC аутентификация](http://wikipedia.org/wiki/Basic_access_authentication). В качестве логина используется номер телефона Кошелька в международном формате.
 
 Возможны следующие коды ошибок, уточняющие HTTP статус 401:
 
@@ -15,6 +15,7 @@ API mserver использует подход [REST](http://wikipedia.org/wiki/R
 |`wallet_disabled`   | Кошелек заблокирован администрацией. Причина блокировки возвращается в поле `details`. |
 |`reset_password`    | Требуется смена пароля. Измените пароль вызовами POST /wallet/send_password_reset_code и POST /wallet/reset_password. |
 
+Дополнительно реализован [протокол OAuth 2.0](#oauth).
 
 ## Ошибки
 
@@ -84,6 +85,7 @@ HTTP статус дублируется в поле `meta.status` ответа 
 |  monthly_in_turnover_limit_exceeded  | превышен лимит на месячный оборот пополнений                                  |
 |  monthly_out_turnover_limit_exceeded | превышен лимит на месячный оборот платежей                                    |
 |  active_cards_limit_exceeded         | превышен лимит на количество одновременно привязанных карт                    |
+|  insufficient_scope                  | недостаточно разрешений (scope) OAuth для выполнения запроса                  |
 
  
 

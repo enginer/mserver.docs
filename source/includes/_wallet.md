@@ -231,8 +231,9 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/wallet
     "phone" : "+79261111111",
     "amount" : 0,
     "name" : "Алексей Арсеньев",
-    "verified" : false,
-    "reset_password" : false
+    "verified" : false,    
+    "level" : "anonymous",
+    "person_status" : "data_entered"
   }
 }
 ```
@@ -258,23 +259,6 @@ https://www.synq.ru/mserver2-dev/v1/wallet/find
   }, {
     "phone" : "+79260000002"
   } ]
-}
-```
-
-## Удаление кошелька
-
-<aside class="notice">Команда работает только на dev сервере.</aside>
-
-```shell
-$ curl -u+79261111111:password -X DELETE https://www.synq.ru/mserver2-dev/v1/wallet
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200,
-    "urgent_data" : { }
-  }
 }
 ```
 

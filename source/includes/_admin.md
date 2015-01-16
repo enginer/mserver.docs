@@ -12,28 +12,74 @@
 
 ## Получение всех кошельков проекта
 
-### Параметры
+### Многопроектность
+
+* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+
+### Постраничная навиция
 
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0
 * `size` - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35
-* `sort` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,createdAt`. Можно указать направление через запятую, например: `amount,desc`
+
+### Параметры
+
+* `order_by` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,created_at`. Можно указать направление через запятую, например: `amount,desc`
+* `group_by`
+* `tick` (day|month) - выбор разреза при группировке (день, месяц). По умолчанию - день.
+
+### Поля ответа:
+
+- `phone` - номер телефона, к которому привязан кошелек
+- `amount` - остаток на балансе кошелька
+- `enabled` - false если кошелек заблокирован, иначе - true
+- `active` - true если кошелек активирован через СМС-код
+- `role` - роль пользователя (всегда равно user)
+- `created_at` - дата регистрации пользователя
+- `person:{...}` - его идентификационные данные
+- `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
+- `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
+- `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
+- `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
+- `statistics.payments.lifetime.count` - количество транзакций за все время
+- `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
+- `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
+- `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
+- `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
+- `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
+- `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
+- `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
+- `statistics.payments.last_month.count` - количество транзакций за последний месяц
+- `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
+- `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
+- `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
+- `statistics.cards.count` - количество привязанных и удаленных карт
+- `statistics.cards.active_count` - количество привязанных активных карт
+
 
 ### Поля для сортировки:
 
-- `paymentCount` - по количеству платежей 
-- `turnover` - по обороту 
-- `activeCardCount` - по количеству привязанных карт 
-- `totalCardCount` - по количеству привязанных карт (с уже удаленными) 
-- `createdAt` - по дате регистрации
+- `statistics.*.*` - по любому полю со статистики
+- `created_at` - по дате регистрации
 - `amount` - по остаткам
 
 ### Фильтры:
 
-- `ipAddress` - по ip адресу
-- `givenName` `familyName` `patronymicName` - по ФИО, поиск полного совпадения или совпадения в начале
+- `ip_address` - по ip адресу
+- `created_before`
+- `created_after`
+- `person.givenName` `person.familyName` `person.patronymicName` - по ФИО, поиск полного совпадения или совпадения в начале
+- `person.status` - по статусу идентификации
 - `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
-- `cardNumber` - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера
+- `card_number` - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера
+- `card_id` - по ID карты в IPSP
+- `amount_from`
+- `amount_to`
 - `active` - по статусу активации (true|false)
+
+### Группировки:
+
+Можно задать поле, по которому будет группировка, в таком случае возвращаемый результат заменяется на агрегированную статистику. Поля для группировок:
+- `created_at` - вернет количество новых регистрацией за каждый `tick`
 
 ```shell
 $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=арсен&active=true&sort=paymentCount,desc"
@@ -50,36 +96,129 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
   "data" : [ {
     "phone" : "+380503839001",
     "amount" : 8598.17,
-    "name" : "Алексей Арсеньев",
-    "verified" : false,
     "enabled" : true,
     "active" : true,
     "role" : "user",
     "created_at" : "2014-08-20T15:10:25.943Z",
-    "last_month_payments_count" : 134,
-    "turnover" : 1401.84,
-    "payment_count" : 197,
-    "active_card_count" : 0,
-    "total_card_count" : 0
+    "person" : {
+    	"family_name" : "Арсеньев",
+    	"given_name" : "Алексей",
+    	"patronymic_name" : "Александрович",
+    	"passport_series_number" : "2202655885",
+    	"passport_issued_at" : "2012-02-27",
+    	"itn" : "330500938709",                       
+    	"ssn" : "11223344595",                        
+    	"status" : "data_entered"
+    },
+    "statistics": {
+      "payments": {
+        "lifetime": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        },
+        "last_month": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        }
+      },
+      "cards": {
+        "count": 4,
+        "active_count": 2
+      }
+    }
   }, {
     "phone" : "+12345675578",
     "amount" : 10000,
-    "name" : "Алексей Арсеньев",
-    "verified" : true,
     "enabled" : true,
     "active" : true,
     "role" : "user",
     "created_at" : "2014-08-05T13:42:34.745Z",
-    "last_month_payments_count" : 8,
-    "turnover" : 0,
-    "payment_count" : 9,
-    "active_card_count" : 0,
-    "total_card_count" : 0
+    "person" : {
+    	"family_name" : "Арсеньев",
+    	"given_name" : "Алексей",
+    	"patronymic_name" : "Александрович",
+    	"passport_series_number" : "2202655885",
+    	"passport_issued_at" : "2012-02-27",
+    	"itn" : "330500938709",                       
+    	"ssn" : "11223344595",                        
+    	"status" : "data_entered"
+    },
+    "statistics": {
+      "payments": {
+        "lifetime": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        },
+        "last_month": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        }
+      },
+      "cards": {
+        "count": 4,
+        "active_count": 2
+      }
+    }
   } ]
 }
 ```
 
 ## Загрузка кошелька
+### Многопроектность
+
+* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+
+### Поля ответа:
+
+- `phone`
+- `amount`
+- `enabled`
+- `active`
+- `role`
+- `created_at`
+- `person:{...}`
+- `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
+- `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
+- `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
+- `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
+- `statistics.payments.lifetime.count` - количество транзакций за все время
+- `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
+- `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
+- `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
+- `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
+- `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
+- `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
+- `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
+- `statistics.payments.last_month.count` - количество транзакций за последний месяц
+- `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
+- `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
+- `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
+- `statistics.cards.count` - количество привязанных и удаленных карт
+- `statistics.cards.active_count` - количество привязанных активных карт
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006"
@@ -87,29 +226,69 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-   "meta":{
-      "code":200
-   },
-   "data":{
-      "phone":"+79260000006",
-      "amount":65572.14,
-      "verified":false,
-      "enabled":true,
-      "active":true,
-      "role":"user",
-      "created_at":"2014-06-01T12:43:52.876Z",
-      "limits":{
-         "in_amount_limit":15000,
-         "out_amount_limit":15000,
-         "wallet_amount_limit":15000,
-         "monthly_in_turnover_limit":40000,
-         "monthly_out_turnover_limit":40000,
-         "monthly_p2p_turnover_limit":40000,
-         "active_cards_limit":10
+  "meta":{
+    "code": 200
+  },
+  "data":{
+    "phone":"+79260000006",
+    "amount":65572.14,
+    "enabled":true,
+    "active":true,
+    "role":"user",
+    "created_at":"2014-06-01T12:43:52.876Z",
+    "person" : {
+      "family_name" : "Арсеньев",
+      "given_name" : "Алексей",
+      "patronymic_name" : "Александрович",
+      "passport_series_number" : "2202655885",
+      "passport_issued_at" : "2012-02-27",
+      "itn" : "330500938709",                       
+      "ssn" : "11223344595",                        
+      "status" : "data_entered"
+    },
+    "limits":{
+      "in_amount_limit":15000,
+      "out_amount_limit":15000,
+      "wallet_amount_limit":15000,
+      "monthly_in_turnover_limit":40000,
+      "monthly_out_turnover_limit":40000,
+      "monthly_p2p_turnover_limit":40000,
+      "active_cards_limit":10,
+
+      "in_amount_limit_available":15000,
+      "out_amount_limit_available":15000,
+      "wallet_amount_limit_available":15000,
+      "active_cards_limit_available": 10
+    },
+    "statistics": {
+      "payments": {
+        "lifetime": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        },
+        "last_month": {
+          "turnover" : 8,
+          "in_turnover" : 8,
+          "out_turnover" : 8,
+          "p2p_turnover" : 8,
+          "count": 8,
+          "in_count" : 8,
+          "out_count" : 8,
+          "p2p_count" : 8,
+        }
       },
-      "in_last_month_turnover":0,
-      "out_last_month_turnover":0
-   }
+      "cards": {
+        "count": 4,
+        "active_count": 2
+      }
+    }
+  }
 }
 ```
 
