@@ -24,7 +24,7 @@
 ### Параметры
 
 * `order_by` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,created_at`. Можно указать направление через запятую, например: `amount,desc`
-* `group_by`
+* `group_by` - поле для группировки
 * `tick` (day|month) - выбор разреза при группировке (день, месяц). По умолчанию - день.
 
 ### Поля ответа:
@@ -35,7 +35,7 @@
 - `active` - true если кошелек активирован через СМС-код
 - `role` - роль пользователя (всегда равно user)
 - `created_at` - дата регистрации пользователя
-- `person:{...}` - его идентификационные данные
+- `person.*` - идентификационные данные пользователя
 - `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
 - `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
 - `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
@@ -58,7 +58,7 @@
 
 ### Поля для сортировки:
 
-- `statistics.*.*` - по любому полю со статистики
+- `statistics.cards.*` - по любому полю со статистики количества карт
 - `created_at` - по дате регистрации
 - `amount` - по остаткам
 
@@ -67,8 +67,8 @@
 - `ip_address` - по ip адресу
 - `created_before`
 - `created_after`
-- `person.givenName` `person.familyName` `person.patronymicName` - по ФИО, поиск полного совпадения или совпадения в начале
-- `person.status` - по статусу идентификации
+- `person[given_name]` `person[family_name]` `person[patronymic_name]` - по ФИО, поиск полного совпадения или совпадения в начале
+- `person[status]` - по статусу идентификации
 - `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
 - `card_number` - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера
 - `card_id` - по ID карты в IPSP
@@ -82,7 +82,7 @@
 - `created_at` - вернет количество новых регистрацией за каждый `tick`
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=арсен&active=true&sort=paymentCount,desc"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name=арсен&active=true&sort=payment_count,desc"
 ```
 
 ```json
@@ -138,51 +138,6 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
         "active_count": 2
       }
     }
-  }, {
-    "phone" : "+12345675578",
-    "amount" : 10000,
-    "enabled" : true,
-    "active" : true,
-    "role" : "user",
-    "created_at" : "2014-08-05T13:42:34.745Z",
-    "person" : {
-    	"family_name" : "Арсеньев",
-    	"given_name" : "Алексей",
-    	"patronymic_name" : "Александрович",
-    	"passport_series_number" : "2202655885",
-    	"passport_issued_at" : "2012-02-27",
-    	"itn" : "330500938709",                       
-    	"ssn" : "11223344595",                        
-    	"status" : "data_entered"
-    },
-    "statistics": {
-      "payments": {
-        "lifetime": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        },
-        "last_month": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        }
-      },
-      "cards": {
-        "count": 4,
-        "active_count": 2
-      }
-    }
   } ]
 }
 ```
@@ -200,7 +155,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?familyName=
 - `active`
 - `role`
 - `created_at`
-- `person:{...}`
+- `person.*`
 - `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
 - `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
 - `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
