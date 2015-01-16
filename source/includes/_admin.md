@@ -598,6 +598,32 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
+## Отчет об остатке кошельков проекта за период
+
+Пероид группировки (tiсk) - день
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/projects/1/balance?from=2014-07-11&to=2014-07-13"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11",
+    "amount" : 55572.14
+  }, {
+    "tick" : "2014-07-12",
+    "amount" : 55572.14
+  }, {
+    "tick" : "2014-07-13",
+    "amount" : 55572.14
+  } ]
+}
+```
+
 ## Получение списка персональных данных
 
 Информация выдаётся постранично. 
