@@ -600,12 +600,17 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ## Отчет об остатке кошельков проекта за период
 
-Пероид группировки (tiсk) - день
+Пероид группировки (tick) - день
 
 ### Параметры
 
 * `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
 * `from`, `to` - Временной промежуток
+* `group_by` - параметр группировки
+
+### Группировка
+* `payment_type` - входящий и исходящий потоки
+
 
 ```shell
 $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-13"
@@ -627,7 +632,104 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
     "amount" : 55572.14
   } ]
 }
+
+> Пример группировки по типу платежа
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-11&group_by=payment_type"
 ```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11",
+    "amount" : {
+      "in": 25572.14,
+      "out": 35245.12
+      }
+  }]
+}
+```
+
+## Отчет о количестве платежей проекта за период
+
+### Параметры
+
+* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+* `from`, `to` - временной промежуток
+* `payment_status` - created | processing | completed | declined - статус платежа
+* `service_id` - фильтр по сервису или по списку сервисов. Идентификаторы через запятую (11,23,45)
+* `group_by` - параметр группировки
+* `tick` (30m | 3h | day | month) - выбор разреза при группировке. По умолчанию - день (day).
+
+### Группировка
+* `payment_status` - динамика проходимости платежей
+
+> Подсчёт всех платежей за период
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from=2014-07-11&to=2014-07-12"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11",
+    "count" : 123
+  }, {
+    "tick" : "2014-07-12",
+    "count" : 98
+  } ]
+}
+```
+
+> Пример с группировкой по статусу платежей
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from=2014-07-11&to=2014-07-11&group_by=payment_status&tick=3h"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11 00:00:00",
+    "count" : {
+      "created" : 24,
+      "processing" : 37,
+      "completed" : 21,
+      "declined" : 1
+    }
+  }, {
+    "tick" : "2014-07-11 00:03:00",
+    "count" : {
+      "created" : 22,
+      "processing" : 29,
+      "completed" : 31,
+      "declined" : 3
+    }
+  },
+  ...
+  {
+    "tick" : "2014-07-12 00:00:00",
+    "count" : {
+      "created" : 22,
+      "processing" : 29,
+      "completed" : 31,
+      "declined" : 3
+    }
+  } ]
+}
+```
+
 
 ## Получение списка персональных данных
 
