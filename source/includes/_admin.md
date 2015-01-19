@@ -602,8 +602,13 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 Пероид группировки (tiсk) - день
 
+### Параметры
+
+* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+* `from`, `to` - Временной промежуток
+
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/projects/1/balance?from=2014-07-11&to=2014-07-13"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-13"
 ```
 
 ```json
