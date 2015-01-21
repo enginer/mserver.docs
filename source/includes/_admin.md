@@ -155,7 +155,11 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
 - `active`
 - `role`
 - `created_at`
-- `person.*`
+- `person.*` - идентификационные данные пользователя
+- `cards.*` - данные по картам прикреплённым к кошельку
+- `cards.state` - created | pending | active | failed | deleted | used - состояние карты
+- `cards.3ds` - unknown | success | failed | none - вид 3D Secure
+- `cards.last_payment_status` - created | processing | completed | declined - статус последнего платежа
 - `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
 - `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
 - `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
@@ -201,6 +205,16 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
       "ssn" : "11223344595",                        
       "status" : "data_entered"
     },
+    "cards":[ {
+      "card_id" : 14,
+      "state" : "used",
+      "title" : "541715******2399",
+      "type" : "MasterCard",
+      "3ds" : "none",
+      "lifetime_turnover" : 245435.56,
+      "card_holder_name" : "Ivanov Ivan",
+      "last_payment_status" : "completed"
+    } ],
     "limits":{
       "in_amount_limit":15000,
       "out_amount_limit":15000,
@@ -574,6 +588,70 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment
 }
 ```
 
+## Поиск по платежам IPSP
+
+### Параметры
+
+Все параметры опциональны
+
+* `wallet` - телефон кошелька, чьи платежи мы хотим видеть
+* `type` - тип платежа
+* `status`- статус платежа
+* `amount_from` и `amount_to` - границы диапазона сумм платежей
+* `date_from` и `date_to` - границы диапазона дат создания платежей
+* `ipsp_payment_id` - идентификатор платежа из IPSP
+* `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
+* `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
+* `sort` - поле сортировки через запятую может следовать направление
+
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments/ipsp?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&sort=amount,desc&size=1"
+```
+
+```json
+{
+  "meta" : {
+    "page" : {
+      "total_elements" : 14
+    },
+    "code" : 200
+  },
+  "data" : [ {
+    "amount" : 4200,
+    "ipsp_payment_id" : 1401089245752,
+    "type" : "SALE",
+    "date" : "2014-11-07T16:52:19.804Z",
+    "product_id" : 1721,
+    "currency" : "RUB",
+    "card_holder_name" : "TESTER TESTEROV",
+    "exp_year" : 2014,
+    "exp_month" : 11,
+    "remote_ip" : "81.95.134.13",
+    "user_ip" : "81.95.134.13",
+    "card_number_mask" : "541715******2399",
+    "card_type" : "MASTER_CARD",
+    "recurring" : false,
+    "steps" : [ {
+      "date" : "2014-11-07T16:52:19.867Z",
+      "status" : "PASSED_0",
+      "type" : "ANTIFRAUD"
+    }, {
+      "eci" : "06",
+      "date" : "2014-11-07T16:52:21.571Z",
+      "status" : "PASSED_0",
+      "type" : "BANK",
+      "auth_id_response" : "411421",
+      "date_local_trans" : "2014-11-07T13:52:21.000Z",
+      "response_code" : "APPROVED_00"
+    }, {
+      "date" : "2014-11-07T16:52:19.843Z",
+      "status" : "PASSED_0",
+      "type" : "PAYMENT_INPUT"
+    } ]
+  } ]
+}
+```
+
 ## Отчет об остатке кошелька по дням
 
 ```shell
@@ -610,6 +688,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ### Группировка
 * `payment_type` - входящий и исходящий потоки
+* `service` - по сервисам
 
 
 ```shell
@@ -646,10 +725,34 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
   },
   "data" : [ {
     "tick" : "2014-07-11",
-    "amount" : {
+    "data" : {
       "in": 25572.14,
       "out": 35245.12
       }
+  }]
+}
+```
+
+> Пример группировки по сервису
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-11&group_by=service"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11",
+    "data" : [ {
+        "service_id": 14,
+        "amount": 35245.12
+      },{
+        "service_id": 16,
+        "amount": 3527.10
+      } ]
   }]
 }
 ```
