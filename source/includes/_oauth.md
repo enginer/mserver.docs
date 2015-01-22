@@ -131,7 +131,7 @@ curl -H "Accept: application/json" -u mbank_web:topsecret https://www.synq.ru/ms
 > Обмен пароля пользователя кошелька на токен доступа
 
 ```shell
-curl -H "Accept: application/json" mbank:secret@localhost:8080/oauth/token -d "grant_type=password&scope=cards.read&username=%2B79201111111&password=password
+curl -H "Accept: application/json" mbank:secret@https://www.synq.ru/mserver2-dev/oauth/token -d "grant_type=password&scope=cards.read&username=%2B79201111111&password=password
 ```
 
 ```json
