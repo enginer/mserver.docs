@@ -7,10 +7,11 @@
 | `out`            | Вывод средств со счета кошелька пользователя в пользу провайдера (провайдер КредитПилот)          |
 | `p2p`            | Перевод денег со счета кошелька пользователя на счет кошелька другого пользователя                |
 | `in`             | Ввод средств на счет кошелька пользователя через провайдера (провайдеры КредитПилот, ИПСП, Рапида)|
+| `inout`          | Транзит средств от ИПСП в пользу КредитПилот                                                      |
 
 ### Поля, общие для всех типов платежей
 
-* `type` - in|out|p2p тип Платежа
+* `type` - in|out|p2p|inout тип Платежа
 * `client_payment_id` - клиентский идентификатор (UUID)
 * `amount` - сумма к зачислению в рублях
 * `total` - полная сумма Платежа с учетом комиссии в рублях
@@ -19,13 +20,13 @@
 * `status` - состояние
 * `decline_reason` - причина отказа в проведении
 
-### Поля для платежей типа `out` (вывод денег)
+### Поля для платежей типа `out` / `inout` (вывод денег / транзит)
 
 * `service` - назначение платежа
 * `outbound` - провайдер, на счет которого были отправлены деньги со счете кошелька
 * `parameters` - параметры платежа, например номер карты/телефона
 
-### Поля для типа `in` (ввод денег)
+### Поля для типа `in` / `inout` (ввод денег / транзит)
 
 * `inbound` - провайдер, со счета которого деньги пришли на счет кошелька
 * `card` - карта с которой прошло пополнение
@@ -64,13 +65,6 @@
 В случае согласия пользователя с условиями исполнения платежа клиент от имени пользователя инициирует исполнение подготовленного платежа (вторая фаза, платежная).
 
 ![проведение платежа](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUg0JTQstGD0YXRhNCw0LfQvdGL0Lkg0L_Qu9Cw0YLQtdC2AAoJ0YDQvtGC0L7QutC-0LsgbXNlcnZlcgoKbm90ZSBvdmVyIGNsaWVudCwAEwg6INCf0L7QtNCzADIHstC4AE8Fu9GM0LDRjyAAbQewCgoANAYtPgAxCVBPU1QgL3BheW1lbnRzIHtwYXJhbXN9AGcGcmlnaHQgb2YAYAkKAIEGCCDRgdC-0LfQtNCw0LXRggCBPA0sCiDRgNCw0YHRgdGH0LjRgtGL0LIAIAi60L7QvNC40YHRgdC40Y4KINC90LjQutGC0L4AAwiD0LTQsCDQtdGJ0LUg0L3QtQCCHQq40YIKZW5kIG5vdGUKCgCCEwctPgCCCgY6IHtpZDogMTIzLCBhbW91bnQ6IDEwMCwgdG90YWw6IDExMCwgbmV4dF9hY3Rpb246IHBheX0AglEHbGVmAIFlBQBEBwog0LrQu9C40LXQvQCBWQa-0LrQsNC3AIFADL_QvgCCXgW3AIJuBQCDQQa70Y4gCgAUB9C90YPRjiDRgQCDSQW40LzQvtGB0YLRjACDag6wIDExMCDRgAoAOheMAIJnBrMAhCYFgdC10L0AggQN0YwAgggLAIQGHgCEYQsAg2ouLzEyMy9wYXkAg3YhAFQFh9C40L0AhBAJ0YAAhQ0FvtC0AIEoBgCFaA0AgloO0YMAhXkGtdC00LvQsNCzAIRYBtGB0Y8g0L4AhhUFsNGI0LgAgmgG0YwKAIUCBQCCWgbRjwCERQUAhCILAIJXBQCEJQoAhBwSAIN_DWdldH0Ahg0TR0UAgXgPAIRjE3N0YXR1czogY29tcGxldGVkAIY4BwCEMSO70YPRhwCGPQcAgSshIAoAWQogKNC40YEAhGAI0LXQvSkKIFlheSEAhhcJ&s=modern-blue)
-
-
-
-
-
-
-
 
 ## Получение истории платежей
 
