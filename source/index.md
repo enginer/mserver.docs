@@ -13,6 +13,7 @@ includes:
   - payments-out
   - payments-p2p
   - payments-in
+  - payments-inout
   - cards
   - admin
 
