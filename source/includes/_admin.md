@@ -1,4 +1,4 @@
-﻿# Административное API
+# Административное API
 
 
 ## Аутентификация
@@ -10,79 +10,79 @@
 | user       | user    | user              |
 | admin      | admin   | admin             |
 
-## Поиск по кошелькам проекта
 
-### Многопроектность
+## Многопроектность
+
+Во всех запросах можно указать относительного какого проекта производится запрос.
 
 * `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
 
-### Постраничная навиция
+
+## Постраничная навиция
 
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0
 * `size` - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35
 
+
+## Поиск по кошелькам проекта
+
+### Постраничная навиция
+
+См. выше.
+
 ### Параметры
 
-* `order_by` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,created_at`
-* `order_direction` - Направление сортировки: asc или desc. Применяется к первому указанному полю в order_by
-* `group_by` - поле для группировки
-* `tick` (day|month) - выбор разреза при группировке (день, месяц). По умолчанию - день.
+* `order_by` - поле для сортировки
+* `order_direction` - направление сортировки: asc или desc (case insensitive)
 
 ### Поля ответа:
 
-- `phone` - номер телефона, к которому привязан кошелек
-- `amount` - остаток на балансе кошелька
-- `enabled` - false если кошелек заблокирован, иначе - true
-- `active` - true если кошелек активирован через СМС-код
-- `role` - роль пользователя (всегда равно user)
-- `created_at` - дата регистрации пользователя
-- `person.*` - идентификационные данные пользователя
-- `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
-- `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
-- `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
-- `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
-- `statistics.payments.lifetime.count` - количество транзакций за все время
-- `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
-- `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
-- `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
-- `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
-- `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
-- `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
-- `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
-- `statistics.payments.last_month.count` - количество транзакций за последний месяц
-- `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
-- `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
-- `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
-- `statistics.cards.count` - количество привязанных и удаленных карт
-- `statistics.cards.active_count` - количество привязанных активных карт
-
+* `phone` - номер телефона, к которому привязан кошелек
+* `amount` - остаток на балансе кошелька
+* `enabled` - false если кошелек заблокирован, иначе - true
+* `active` - true если кошелек активирован через СМС-код
+* `role` - роль пользователя (всегда равно user)
+* `created_at` - дата регистрации пользователя
+* `person.*` - идентификационные данные пользователя
+* `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
+* `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
+* `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
+* `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
+* `statistics.payments.lifetime.count` - количество транзакций за все время
+* `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
+* `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
+* `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
+* `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
+* `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
+* `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
+* `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
+* `statistics.payments.last_month.count` - количество транзакций за последний месяц
+* `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
+* `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
+* `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
+* `statistics.cards.count` - количество привязанных и удаленных карт
+* `statistics.cards.active_count` - количество привязанных активных карт
 
 ### Поля для сортировки:
 
-- `statistics.cards.*` - по любому полю со статистики количества карт
-- `created_at` - по дате регистрации
-- `amount` - по остаткам
+* `statistics.cards.*count` - по любому count полю со статистики количества карт
+* `created_at` - по дате регистрации
+* `amount` - по остаткам
 
 ### Фильтры:
 
-- `ip` - по ip адресу
-- `created_before`
-- `created_after`
-- `person_given_name` `person_family_name` `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
-- `person_status` - по статусу идентификации
-- `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
-- `card_number_first` - по первым 6 цифрам номера карты
-- `card_number_last` - по последним 4 цифрам номера карты
-- `card_id` - по ID карты в IPSP
-- `amount_from`
-- `amount_to`
-- `active` - по статусу активации (true|false)
-- `enabled` - по статусу блокировки
-
-### Группировки:
-
-Можно задать поле, по которому будет группировка, в таком случае возвращаемый результат заменяется на агрегированную статистику. Поля для группировок:
-- `created_at` - вернет количество новых регистрацией за каждый `tick`
+* `ip` - по ip адресу
+* `created_before` и `created_after` - по дате регистрации
+* `person_given_name`, `person_family_name` и `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
+* `person_status` - по статусу идентификации
+* `person_passport_series_number` - по номеру и серии паспорта
+* `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
+* `card_number_first` - по первым 6-ти цифрам номера карты
+* `card_number_last` - по последним 4-ем цифрам номера карты
+* `card_id` - по ID карты в IPSP
+* `amount_from` и `amount_to` - по сумме остатка на кошельке
+* `active` - по статусу активации (true|false)
+* `disabled` - по статусу блокировки (true|false)
 
 ```shell
 $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name=арсен&active=true&order_by=payment_count&order_direction=desc"
@@ -104,14 +104,14 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
     "role" : "user",
     "created_at" : "2014-08-20T15:10:25.943Z",
     "person" : {
-    	"family_name" : "Арсеньев",
-    	"given_name" : "Алексей",
-    	"patronymic_name" : "Александрович",
-    	"passport_series_number" : "2202655885",
-    	"passport_issued_at" : "2012-02-27",
-    	"itn" : "330500938709",                       
-    	"ssn" : "11223344595",                        
-    	"status" : "data_entered"
+        "family_name" : "Арсеньев",
+        "given_name" : "Алексей",
+        "patronymic_name" : "Александрович",
+        "passport_series_number" : "2202655885",
+        "passport_issued_at" : "2012-02-27",
+        "itn" : "330500938709",
+        "ssn" : "11223344595",
+        "status" : "data_entered"
     },
     "statistics": {
       "payments": {
@@ -145,42 +145,107 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
 }
 ```
 
-## Загрузка кошелька
-### Многопроектность
+## Аналитика по кошелькам
 
-* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+### Параметры
+
+* `group_by` - поле для группировки
+* `tick` (day|month) - выбор разреза при группировке (день|месяц). По умолчанию - день.
+
+### Фильтры:
+(См. "Поиск по кошелькам")
+
+* `ip` - по ip адресу
+* `created_before` и `created_after` - по дате регистрации
+* `person_given_name`, `person_family_name` и `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
+* `person_status` - по статусу идентификации
+* `person_passport_series_number` - по номеру и серии паспорта
+* `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
+* `card_number_first` - по первым 6-ти цифрам номера карты
+* `card_number_last` - по последним 4-ем цифрам номера карты
+* `card_id` - по ID карты в IPSP
+* `amount_from` и `amount_to` - по сумме остатка на кошельке
+* `active` - по статусу активации (true|false)
+* `disabled` - по статусу блокировки (true|false)
+
+### Группировки:
+
+* `created_at` - вернет количество новых регистрацией за каждый `tick`
+
+> Количество зарегистрированных кошельков с фильтром
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets_count?active=true"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : {
+    "count": 200
+  }
+}
+
+> Динамика регистраций кошельков с фильтром
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets_count?group_by=created_at&tick=day&created_after=2014-01-01"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-06-01",
+    "count" : 125477.16
+  }, {
+    "tick" : "2014-06-02",
+    "count" : 0
+  }, {
+    "tick" : "2014-06-03",
+    "count" : 0
+  } ]
+}
+```
+
+
+## Загрузка кошелька
 
 ### Поля ответа:
 
-- `phone`
-- `amount`
-- `enabled`
-- `active`
-- `role`
-- `created_at`
-- `person.*` - идентификационные данные пользователя
-- `cards.*` - данные по картам прикреплённым к кошельку
-- `cards.state` - created | pending | active | failed | deleted | used - состояние карты
-- `cards.3ds` - unknown | success | failed | none - вид 3D Secure
-- `cards.last_payment_status` - created | processing | completed | declined - статус последнего платежа
-- `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
-- `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
-- `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
-- `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
-- `statistics.payments.lifetime.count` - количество транзакций за все время
-- `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
-- `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
-- `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
-- `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
-- `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
-- `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
-- `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
-- `statistics.payments.last_month.count` - количество транзакций за последний месяц
-- `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
-- `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
-- `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
-- `statistics.cards.count` - количество привязанных и удаленных карт
-- `statistics.cards.active_count` - количество привязанных активных карт
+* `phone`
+* `amount`
+* `enabled`
+* `active`
+* `role`
+* `created_at`
+* `person.*` - идентификационные данные пользователя
+* `cards.*` - данные по картам прикреплённым к кошельку
+* `cards.state` - (created | pending | active | failed | deleted | used) - состояние карты
+* `cards.3ds` - (unknown | success | failed | none) - вид 3D Secure
+* `cards.last_payment_status` - (created | processing | completed | declined) - статус последнего платежа
+* `statistics.payments.lifetime.turnover` - оборот по кошельку за все время
+* `statistics.payments.lifetime.in_turnover` - оборот по транзакциям типа in за все время
+* `statistics.payments.lifetime.out_turnover` - оборот по транзакциям типа out за все время
+* `statistics.payments.lifetime.p2p_turnover` - оборот по транзакциям типа p2p за все время
+* `statistics.payments.lifetime.count` - количество транзакций за все время
+* `statistics.payments.lifetime.in_count` - количество транзакций типа in за все время
+* `statistics.payments.lifetime.out_count` - количество транзакций типа out за все время
+* `statistics.payments.lifetime.p2p_count` - количество транзакций типа out за все время
+* `statistics.payments.last_month.turnover` - оборот по кошельку за последний месяц
+* `statistics.payments.last_month.in_turnover` - оборот по транзакциям типа in за последний месяц
+* `statistics.payments.last_month.out_turnover` - оборот по транзакциям типа out за последний месяц
+* `statistics.payments.last_month.p2p_turnover` - оборот по транзакциям типа p2p за последний месяц
+* `statistics.payments.last_month.count` - количество транзакций за последний месяц
+* `statistics.payments.last_month.in_count` - количество транзакций типа in за последний месяц
+* `statistics.payments.last_month.out_count` - количество транзакций типа out за последний месяц
+* `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
+* `statistics.cards.count` - количество привязанных и удаленных карт
+* `statistics.cards.active_count` - количество привязанных активных карт
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006"
@@ -204,8 +269,8 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
       "patronymic_name" : "Александрович",
       "passport_series_number" : "2202655885",
       "passport_issued_at" : "2012-02-27",
-      "itn" : "330500938709",                       
-      "ssn" : "11223344595",                        
+      "itn" : "330500938709",
+      "ssn" : "11223344595",
       "status" : "data_entered"
     },
     "cards":[ {
@@ -264,6 +329,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
+
 ## Получение кода активации кошелька
 
 ```shell
@@ -280,6 +346,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B1234565736
   }
 }
 ```
+
 
 ## Блокировка кошелька
 
@@ -311,6 +378,7 @@ $ curl -uuser:user  -H 'Content-type:application/json' --data '{"message": "За
 }
 ```
 
+
 ## Разблокировка кошелька
 
 ```shell
@@ -333,14 +401,21 @@ $ curl -uuser:user -X POST "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12
 }
 ```
 
-## Отчет об обороте кошелька по дням
 
-Пероид группировки (tick) - день
+## Отчет об обороте кошелька по дням
 
 ### Параметры
 
-* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
 * `date_from`, `date_to` - Временной промежуток
+* `group_by` - параметр группировки
+* `tick` - период группировки, по-умолчанию - день
+
+### Группировка
+
+* `payment_type` - входящий и исходящий потоки
+* `service_id` - по сервисам
+
+> Пример запроса оборота
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?date_from=2014-05-01&date_to=2014-06-03"
@@ -353,35 +428,83 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
   },
   "data" : [ {
     "tick" : "2014-06-01",
-    "amount" : 125477.16
+    "turnover" : 125477.16
   }, {
     "tick" : "2014-06-02",
-    "amount" : 0
+    "turnover" : 0
   }, {
     "tick" : "2014-06-03",
-    "amount" : 0
+    "turnover" : 0
   } ]
 }
 ```
 
-## Получение отчёта по платежам
+> Пример группировки по типу платежа
 
-### Параметры
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?group_by=payment_type&date_from=2014-07-11&date_to=2014-07-11"
+```
 
-Все параметры опциональны
+```json
+{
+  "meta" : {
+    "code" : 200
+  },
+  "data" : [ {
+    "tick" : "2014-07-11",
+    "in": 25572.14,
+    "out": 35245.12,
+    "p2p": 0
+  }]
+}
+```
+
+> Пример группировки по сервису, возвращает
+
+```shell
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?date_from=2014-07-11&date_to=2014-07-11&group_by=service"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11",
+         "data":[
+            {
+               "service_id":14,
+               "amount":35245.12
+            },
+            {
+               "service_id":16,
+               "amount":3527.10
+            }
+         ]
+      }
+   ]
+}
+```
+
+
+## Поиск по платежам
+
+### Параметры (опциональные)
 
 * `wallet` - телефон кошелька, чьи платежи мы хотим видеть
 * `type` - тип платежа
 * `status`- статус платежа
 * `service_name` - полное или частичное имя сервиса
-* `service_id` - ID сервиса (как альтернатива service_name)
+* `service_ids` - список ID сервиса (как альтернатива service_name), ID сервисов перечисляются через запятую, например: 3,19,293
 * `amount_from` и `amount_to` - границы диапазона сумм платежей, формат UTC
 * `date_from` и `date_to` - границы диапазона дат создания платежей
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
 * `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
 * `order_by` - поле для сортировки
 * `order_direction` - направление сортировки
-* `client_ip` - IP адрес плательщика
+* `client_ip` - IP адрес плательщика (или сервиса с которого поступило распоряжение на списание)
 * `inbound_payment_id` - идентификатор платежа из IPSP
 * `inbound_payment_status` - идентификатор платежа из IPSP
 * `inbound_payment_amount_from` и `inbound_payment_amount_to` - границы диапазона сумм платежей IPSP
@@ -565,20 +688,12 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?inbound_paym
 }
 ```
 
-## Отчет об остатке кошельков проекта за период
 
-Пероид группировки (tick) - день
+## Отчет об остатке кошельков проекта за период
 
 ### Параметры
 
-* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
 * `date_from`, `date_to` - Временной промежуток
-* `group_by` - параметр группировки
-
-### Группировка
-* `payment_type` - входящий и исходящий потоки
-* `service` - по сервисам
-
 
 ```shell
 $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-13"
@@ -601,59 +716,14 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
   } ]
 }
 
-> Пример группировки по типу платежа
 
-```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?date_from=2014-07-11&date_to=2014-07-11&group_by=payment_type"
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "data" : {
-      "in": 25572.14,
-      "out": 35245.12
-      }
-  }]
-}
-```
-
-> Пример группировки по сервису
-
-```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?date_from=2014-07-11&date_to=2014-07-11&group_by=service"
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "data" : [ {
-        "service_id": 14,
-        "amount": 35245.12
-      },{
-        "service_id": 16,
-        "amount": 3527.10
-      } ]
-  }]
-}
-```
-
-## Отчет о количестве платежей проекта за период 
+## Отчет о количестве платежей проекта за период
 
 ### Параметры
 
-* `project_id` - (фильтр) ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
 * `date_from`, `date_to` - (фильтр) временной промежуток, по-умолчанию 1 месяц с текущего момента
 * `status` - (фильтр) created | processing | completed | declined - статус платежа
-* `service_id` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую (11,23,45)
+* `service_ids` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую (11,23,45)
 * `group_by` - параметр группировки
 * `tick` (30m | 3h | day | month) - выбор разреза при группировке. По умолчанию - день (day).
 
@@ -694,29 +764,27 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date
   },
   "data" : [ {
     "tick" : "2014-07-11 00:00:00",
-    "created_count" : 24,
-    "processing_count" : 37,
-    "completed_count" : 21,
-    "declined_count" : 1,
-    "count" : 83
+    "count" : 83,
+    "created" : 24,
+    "processing" : 37,
+    "completed" : 21,
+    "declined" : 1,
   }, {
     "tick" : "2014-07-11 00:03:00",
-    "count" : {
-      "created" : 22,
-      "processing" : 29,
-      "completed" : 31,
-      "declined" : 3,
-    }
+    "count" : 83,
+    "created" : 22,
+    "processing" : 29,
+    "completed" : 31,
+    "declined" : 3
   },
   ...
   {
     "tick" : "2014-07-12 00:00:00",
-    "count" : {
-      "created" : 22,
-      "processing" : 29,
-      "completed" : 31,
-      "declined" : 3
-    }
+    "count" : 83,
+    "created" : 22,
+    "processing" : 29,
+    "completed" : 31,
+    "declined" : 3
   } ]
 }
 ```
@@ -724,7 +792,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date
 
 ## Получение списка персональных данных
 
-Информация выдаётся постранично. 
+Информация выдаётся постранично.
 
 ### Параметры постраничного запроса
 
@@ -783,7 +851,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 * `status` - `data_entered` | `data_verified` статус персональных данных
 
 ```shell
-$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006" 
+$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006"
 ```
 
 > Результат содержит `"status": "data_verified", "verified_at": "2014-10-22T10:26:12.035Z"`
