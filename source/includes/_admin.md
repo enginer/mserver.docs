@@ -67,11 +67,11 @@
 - `ip_address` - по ip адресу
 - `created_before`
 - `created_after`
-- `person[given_name]` `person[family_name]` `person[patronymic_name]` - по ФИО, поиск полного совпадения или совпадения в начале
-- `person[status]` - по статусу идентификации
+- `given_name` `family_name` `patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
+- `person_status` - по статусу идентификации
 - `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
 - `card_number` - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера
-- `card_id` - по ID карты в IPSP
+- `ipsp_card_id` - по ID карты в IPSP, формат UUID
 - `amount_from`
 - `amount_to`
 - `active` - по статусу активации (true|false)
