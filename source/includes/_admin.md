@@ -26,6 +26,10 @@
 
 ## Поиск по кошелькам проекта
 
+### Постраничная навиция
+
+См. выше.
+
 ### Параметры
 
 * `order_by` - поле для сортировки
@@ -58,8 +62,6 @@
 * `statistics.payments.last_month.p2p_count` - количество транзакций типа out за последний месяц
 * `statistics.cards.count` - количество привязанных и удаленных карт
 * `statistics.cards.active_count` - количество привязанных активных карт
-* `page` - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0
-* `size` - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35
 
 ### Поля для сортировки:
 
@@ -88,58 +90,62 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
 
 ```json
 {
-  "meta" : {
-    "page" : {
-      "total_elements" : 4
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "phone" : "+380503839001",
-    "amount" : 8598.17,
-    "enabled" : true,
-    "active" : true,
-    "role" : "user",
-    "created_at" : "2014-08-20T15:10:25.943Z",
-    "person" : {
-        "family_name" : "Арсеньев",
-        "given_name" : "Алексей",
-        "patronymic_name" : "Александрович",
-        "passport_series_number" : "2202655885",
-        "passport_issued_at" : "2012-02-27",
-        "itn" : "330500938709",
-        "ssn" : "11223344595",
-        "status" : "data_entered"
-    },
-    "statistics": {
-      "payments": {
-        "lifetime": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        },
-        "last_month": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        }
+   "meta":{
+      "page":{
+         "total_elements":4
       },
-      "cards": {
-        "count": 4,
-        "active_count": 2
+      "code":200
+   },
+   "data":[
+      {
+         "phone":"+380503839001",
+         "amount":8598.17,
+         "enabled":true,
+         "active":true,
+         "role":"user",
+         "created_at":"2014-08-20T15:10:25.943Z",
+         "person":{
+            "family_name":"Арсеньев",
+            "given_name":"Алексей",
+            "patronymic_name":"Александрович",
+            "passport_series_number":"2202655885",
+            "passport_issued_at":"2012-02-27",
+            "itn":"330500938709",
+            "ssn":"11223344595",
+            "status":"data_entered"
+         },
+         "statistics":{
+            "payments":{
+               "lifetime":{
+                  "turnover":8,
+                  "in_turnover":8,
+                  "out_turnover":8,
+                  "p2p_turnover":8,
+                  "count":8,
+                  "in_count":8,
+                  "out_count":8,
+                  "p2p_count":8,
+
+               },
+               "last_month":{
+                  "turnover":8,
+                  "in_turnover":8,
+                  "out_turnover":8,
+                  "p2p_turnover":8,
+                  "count":8,
+                  "in_count":8,
+                  "out_count":8,
+                  "p2p_count":8,
+
+               }
+            },
+            "cards":{
+               "count":4,
+               "active_count":2
+            }
+         }
       }
-    }
-  } ]
+   ]
 }
 ```
 
@@ -178,13 +184,14 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets_count?activ
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : {
-    "count": 200
-  }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "count":200
+   }
 }
+```
 
 > Динамика регистраций кошельков с фильтром
 
@@ -194,19 +201,29 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets_count?group
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-06-01",
-    "count" : 125477.16
-  }, {
-    "tick" : "2014-06-02",
-    "count" : 0
-  }, {
-    "tick" : "2014-06-03",
-    "count" : 0
-  } ]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-06-01",
+         "data":{
+            "count":125477.16
+         }
+      },
+      {
+         "tick":"2014-06-02",
+         "data":{
+            "count":0
+         }
+      },
+      {
+         "tick":"2014-06-03",
+         "data":{
+            "count":0
+         }
+      }
+   ]
 }
 ```
 
@@ -251,79 +268,82 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-  "meta":{
-    "code": 200
-  },
-  "data":{
-    "phone":"+79260000006",
-    "amount":65572.14,
-    "enabled":true,
-    "active":true,
-    "role":"user",
-    "created_at":"2014-06-01T12:43:52.876Z",
-    "person" : {
-      "family_name" : "Арсеньев",
-      "given_name" : "Алексей",
-      "patronymic_name" : "Александрович",
-      "passport_series_number" : "2202655885",
-      "passport_issued_at" : "2012-02-27",
-      "itn" : "330500938709",
-      "ssn" : "11223344595",
-      "status" : "data_entered"
-    },
-    "cards":[ {
-      "card_id" : 14,
-      "state" : "used",
-      "title" : "541715******2399",
-      "type" : "MasterCard",
-      "3ds" : "none",
-      "lifetime_turnover" : 245435.56,
-      "card_holder_name" : "Ivanov Ivan",
-      "last_payment_status" : "completed"
-    } ],
-    "limits":{
-      "in_amount_limit":15000,
-      "out_amount_limit":15000,
-      "wallet_amount_limit":15000,
-      "monthly_in_turnover_limit":40000,
-      "monthly_out_turnover_limit":40000,
-      "monthly_p2p_turnover_limit":40000,
-      "active_cards_limit":10,
-
-      "in_amount_limit_available":15000,
-      "out_amount_limit_available":15000,
-      "wallet_amount_limit_available":15000,
-      "active_cards_limit_available": 10
-    },
-    "statistics": {
-      "payments": {
-        "lifetime": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        },
-        "last_month": {
-          "turnover" : 8,
-          "in_turnover" : 8,
-          "out_turnover" : 8,
-          "p2p_turnover" : 8,
-          "count": 8,
-          "in_count" : 8,
-          "out_count" : 8,
-          "p2p_count" : 8,
-        }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "phone":"+79260000006",
+      "amount":65572.14,
+      "enabled":true,
+      "active":true,
+      "role":"user",
+      "created_at":"2014-06-01T12:43:52.876Z",
+      "person":{
+         "family_name":"Арсеньев",
+         "given_name":"Алексей",
+         "patronymic_name":"Александрович",
+         "passport_series_number":"2202655885",
+         "passport_issued_at":"2012-02-27",
+         "itn":"330500938709",
+         "ssn":"11223344595",
+         "status":"data_entered"
       },
-      "cards": {
-        "count": 4,
-        "active_count": 2
+      "cards":[
+         {
+            "card_id":14,
+            "state":"used",
+            "title":"541715******2399",
+            "type":"MasterCard",
+            "3ds":"none",
+            "lifetime_turnover":245435.56,
+            "card_holder_name":"Ivanov Ivan",
+            "last_payment_status":"completed"
+         }
+      ],
+      "limits":{
+         "in_amount_limit":15000,
+         "out_amount_limit":15000,
+         "wallet_amount_limit":15000,
+         "monthly_in_turnover_limit":40000,
+         "monthly_out_turnover_limit":40000,
+         "monthly_p2p_turnover_limit":40000,
+         "active_cards_limit":10,
+         "in_amount_limit_available":15000,
+         "out_amount_limit_available":15000,
+         "wallet_amount_limit_available":15000,
+         "active_cards_limit_available":10
+      },
+      "statistics":{
+         "payments":{
+            "lifetime":{
+               "turnover":8,
+               "in_turnover":8,
+               "out_turnover":8,
+               "p2p_turnover":8,
+               "count":8,
+               "in_count":8,
+               "out_count":8,
+               "p2p_count":8,
+
+            },
+            "last_month":{
+               "turnover":8,
+               "in_turnover":8,
+               "out_turnover":8,
+               "p2p_turnover":8,
+               "count":8,
+               "in_count":8,
+               "out_count":8,
+               "p2p_count":8,
+
+            }
+         },
+         "cards":{
+            "count":4,
+            "active_count":2
+         }
       }
-    }
-  }
+   }
 }
 ```
 
@@ -336,12 +356,12 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B1234565736
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : {
-    "security_code": "2899066"
-  }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "security_code":"2899066"
+   }
 }
 ```
 
@@ -359,20 +379,20 @@ $ curl -uuser:user  -H 'Content-type:application/json' --data '{"message": "За
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : {
-    "phone" : "+12345657367",
-    "amount" : 10000,
-    "reset_password" : false,
-    "lock_message" : "Заблокироваан до выяснения.",
-    "verified" : false,
-    "enabled" : false,
-    "active" : true,
-    "lock_reason" : "Клиент - кардер."
-    "locked_at" : "2014-08-14T16:46:42.122Z"
-  }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "phone":"+12345657367",
+      "amount":10000,
+      "reset_password":false,
+      "lock_message":"Заблокироваан до выяснения.",
+      "verified":false,
+      "enabled":false,
+      "active":true,
+      "lock_reason":"Клиент - кардер.",
+      "locked_at":"2014-08-14T16:46:42.122Z"
+   }
 }
 ```
 
@@ -385,17 +405,17 @@ $ curl -uuser:user -X POST "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : {
-    "phone" : "+12345657367",
-    "amount" : 10000,
-    "reset_password" : false,
-    "verified" : false,
-    "enabled" : true,
-    "active" : true
-  }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "phone":"+12345657367",
+      "amount":10000,
+      "reset_password":false,
+      "verified":false,
+      "enabled":true,
+      "active":true
+   }
 }
 ```
 
@@ -421,19 +441,29 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-06-01",
-    "turnover" : 125477.16
-  }, {
-    "tick" : "2014-06-02",
-    "turnover" : 0
-  }, {
-    "tick" : "2014-06-03",
-    "turnover" : 0
-  } ]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-06-01",
+         "data":{
+            "turnover":125477.16
+         }
+      },
+      {
+         "tick":"2014-06-02",
+         "data":{
+            "turnover":0
+         }
+      },
+      {
+         "tick":"2014-06-03",
+         "data":{
+            "turnover":0
+         }
+      }
+   ]
 }
 ```
 
@@ -445,15 +475,19 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "in": 25572.14,
-    "out": 35245.12,
-    "p2p": 0
-  }]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11",
+         "data":{
+            "in":25572.14,
+            "out":35245.12,
+            "p2p":0
+         }
+      }
+   ]
 }
 ```
 
@@ -521,41 +555,45 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name
 
 ```json
 {
-  "meta" : {
-    "page" : {
-      "total_elements" : 14
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "id" : 1401089244704,
-    "client_payment_id" : "409c1e06-5faa-11e4-a61c-b88d12284ddc",
-    "amount" : 12000,
-    "total" : 12070,
-    "created_at" : "2014-10-29T20:29:16.495Z",
-    "status" : "created",
-    "type" : "out",
-    "service" : {
-      "id" : 15,
-      "name" : "MTS Украина"
-    },
-    "parameters" : [ {
-      "code" : "phoneNumber",
-      "name" : "№ телефона (9-10 цифр)",
-      "value" : "0509244512"
-    } ],
-    "outbound" : {
-      "id" : 35,
-      "code" : "tpr_out",
-      "name" : "ООО ТПР (провайдер)"
-    },
-    "wallet" : {
-      "phone" : "+79270000001",
-      "amount" : 8496.32,
-      "verified" : false,
-      "ip" : "37.110.42.197"
-    }
-  } ]
+   "meta":{
+      "page":{
+         "total_elements":14
+      },
+      "code":200
+   },
+   "data":[
+      {
+         "id":1401089244704,
+         "client_payment_id":"409c1e06-5faa-11e4-a61c-b88d12284ddc",
+         "amount":12000,
+         "total":12070,
+         "created_at":"2014-10-29T20:29:16.495Z",
+         "status":"created",
+         "type":"out",
+         "service":{
+            "id":15,
+            "name":"MTS Украина"
+         },
+         "parameters":[
+            {
+               "code":"phoneNumber",
+               "name":"№ телефона (9-10 цифр)",
+               "value":"0509244512"
+            }
+         ],
+         "outbound":{
+            "id":35,
+            "code":"tpr_out",
+            "name":"ООО ТПР (провайдер)"
+         },
+         "wallet":{
+            "phone":"+79270000001",
+            "amount":8496.32,
+            "verified":false,
+            "ip":"37.110.42.197"
+         }
+      }
+   ]
 }
 ```
 
@@ -567,34 +605,36 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B38
 
 ```json
 {
-  "meta" : {
-    "page" : {
-      "total_elements" : 2
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "id" : 1401089245266,
-    "client_payment_id" : "96c280f4-8e2b-40a1-b250-806bb4a4b9f1",
-    "amount" : 10000,
-    "total" : 10000,
-    "created_at" : "2014-11-04T13:02:09.409Z",
-    "processed_at" : "2014-11-04T13:02:13.619Z",
-    "status" : "completed",
-    "type" : "p2p",
-    "wallet" : {
-      "phone" : "+380935895452",
-      "amount" : 0,
-      "name" : "Иван Иванов",
-      "verified" : true,
-      "ip" : "127.0.0.1"
-    },
-    "destination" : {
-      "phone" : "+79555555555"
-    },
-    "direction" : "out",
-    "client_ip" : "127.0.0.1"
-  } ]
+   "meta":{
+      "page":{
+         "total_elements":2
+      },
+      "code":200
+   },
+   "data":[
+      {
+         "id":1401089245266,
+         "client_payment_id":"96c280f4-8e2b-40a1-b250-806bb4a4b9f1",
+         "amount":10000,
+         "total":10000,
+         "created_at":"2014-11-04T13:02:09.409Z",
+         "processed_at":"2014-11-04T13:02:13.619Z",
+         "status":"completed",
+         "type":"p2p",
+         "wallet":{
+            "phone":"+380935895452",
+            "amount":0,
+            "name":"Иван Иванов",
+            "verified":true,
+            "ip":"127.0.0.1"
+         },
+         "destination":{
+            "phone":"+79555555555"
+         },
+         "direction":"out",
+         "client_ip":"127.0.0.1"
+      }
+   ]
 }
 ```
 
@@ -606,83 +646,89 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?inbound_paym
 
 ```json
 {
-  "meta" : {
-    "code" : 200,
-    "page" : {
-      "total_elements" : 1
-    }
-  },
-  "data" : [ {
-    "id" : 1401089245752,
-    "client_payment_id" : "6ea16c52-669e-11e4-86b1-3c07542cf2f2",
-    "amount" : 42,
-    "total" : 42,
-    "created_at" : "2014-11-07T16:52:17.990Z",
-    "processed_at" : "2014-11-07T16:52:21.791Z",
-    "status" : "completed",
-    "type" : "in",
-    "inbound" : {
-      "id" : 62,
-      "code" : "ipsp_in",
-      "name" : "ООО ИПСП (агент)",
-      "payment" : {
-        "amount" : 4200,
-        "id" : 1401089245752,
-        "type" : "SALE",
-        "date" : "2014-11-07T16:52:19.804Z",
-        "product_id" : 1721,
-        "currency" : "RUB",
-        "card_holder_name" : "TESTER TESTEROV",
-        "exp_year" : 2014,
-        "exp_month" : 11,
-        "remote_ip" : "81.95.134.13",
-        "user_ip" : "81.95.134.13",
-        "card_number_mask" : "541715******2399",
-        "card_type" : "MASTER_CARD",
-        "recurring" : false,
-        "steps" : [ {
-          "date" : "2014-11-07T16:52:19.867Z",
-          "status" : "PASSED_0",
-          "type" : "ANTIFRAUD"
-        }, {
-          "eci" : "06",
-          "date" : "2014-11-07T16:52:21.571Z",
-          "status" : "PASSED_0",
-          "type" : "BANK",
-          "auth_id_response" : "411421",
-          "date_local_trans" : "2014-11-07T13:52:21.000Z",
-          "response_code" : "APPROVED_00"
-        }, {
-          "date" : "2014-11-07T16:52:19.843Z",
-          "status" : "PASSED_0",
-          "type" : "PAYMENT_INPUT"
-        } ]
+   "meta":{
+      "code":200,
+      "page":{
+         "total_elements":1
       }
-    },
-    "card" : {
-      "state" : "used",
-      "title" : "541715******2399",
-      "type" : "MasterCard",
-      "bin" : {
-        "country" : "Ukraine",
-        "bank": "JCB PrivatBank",
-        "type": "debit"
+   },
+   "data":[
+      {
+         "id":1401089245752,
+         "client_payment_id":"6ea16c52-669e-11e4-86b1-3c07542cf2f2",
+         "amount":42,
+         "total":42,
+         "created_at":"2014-11-07T16:52:17.990Z",
+         "processed_at":"2014-11-07T16:52:21.791Z",
+         "status":"completed",
+         "type":"in",
+         "inbound":{
+            "id":62,
+            "code":"ipsp_in",
+            "name":"ООО ИПСП (агент)",
+            "payment":{
+               "amount":4200,
+               "id":1401089245752,
+               "type":"SALE",
+               "date":"2014-11-07T16:52:19.804Z",
+               "product_id":1721,
+               "currency":"RUB",
+               "card_holder_name":"TESTER TESTEROV",
+               "exp_year":2014,
+               "exp_month":11,
+               "remote_ip":"81.95.134.13",
+               "user_ip":"81.95.134.13",
+               "card_number_mask":"541715******2399",
+               "card_type":"MASTER_CARD",
+               "recurring":false,
+               "steps":[
+                  {
+                     "date":"2014-11-07T16:52:19.867Z",
+                     "status":"PASSED_0",
+                     "type":"ANTIFRAUD"
+                  },
+                  {
+                     "eci":"06",
+                     "date":"2014-11-07T16:52:21.571Z",
+                     "status":"PASSED_0",
+                     "type":"BANK",
+                     "auth_id_response":"411421",
+                     "date_local_trans":"2014-11-07T13:52:21.000Z",
+                     "response_code":"APPROVED_00"
+                  },
+                  {
+                     "date":"2014-11-07T16:52:19.843Z",
+                     "status":"PASSED_0",
+                     "type":"PAYMENT_INPUT"
+                  }
+               ]
+            }
+         },
+         "card":{
+            "state":"used",
+            "title":"541715******2399",
+            "type":"MasterCard",
+            "bin":{
+               "country":"Ukraine",
+               "bank":"JCB PrivatBank",
+               "type":"debit"
+            }
+         },
+         "wallet":{
+            "phone":"+79270000001",
+            "amount":7462.54,
+            "level":"anonymous",
+            "name":"Пиэчпий Мбанков",
+            "verified":true,
+            "person_status":"data_verified",
+            "enabled":true,
+            "active":true,
+            "role":"user",
+            "created_at":"2014-10-29T16:33:14.045Z"
+         },
+         "client_ip":"81.95.134.13"
       }
-    },
-    "wallet" : {
-      "phone" : "+79270000001",
-      "amount" : 7462.54,
-      "level" : "anonymous",
-      "name" : "Пиэчпий Мбанков",
-      "verified" : true,
-      "person_status" : "data_verified",
-      "enabled" : true,
-      "active" : true,
-      "role" : "user",
-      "created_at" : "2014-10-29T16:33:14.045Z"
-    },
-    "client_ip" : "81.95.134.13"
-  } ]
+   ]
 }
 ```
 
@@ -699,20 +745,31 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "amount" : 55572.14
-  }, {
-    "tick" : "2014-07-12",
-    "amount" : 55572.14
-  }, {
-    "tick" : "2014-07-13",
-    "amount" : 55572.14
-  } ]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11",
+         "data":{
+            "amount":55572.14
+         }
+      },
+      {
+         "tick":"2014-07-12",
+         "data":{
+            "amount":55572.14
+         }
+      },
+      {
+         "tick":"2014-07-13",
+         "data":{
+            "amount":55572.14
+         }
+      }
+   ]
 }
+```
 
 
 ## Отчет о количестве платежей проекта за период
@@ -736,16 +793,23 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "count" : 123
-  }, {
-    "tick" : "2014-07-12",
-    "count" : 98
-  } ]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11",
+         "data": {
+             "count":123
+         }
+      },
+      {
+         "tick":"2014-07-12",
+         "data": {
+             "count":98
+         }
+      }
+   ]
 }
 ```
 
@@ -757,33 +821,42 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11 00:00:00",
-    "count" : 83,
-    "created" : 24,
-    "processing" : 37,
-    "completed" : 21,
-    "declined" : 1,
-  }, {
-    "tick" : "2014-07-11 00:03:00",
-    "count" : 83,
-    "created" : 22,
-    "processing" : 29,
-    "completed" : 31,
-    "declined" : 3
-  },
-  ...
-  {
-    "tick" : "2014-07-12 00:00:00",
-    "count" : 83,
-    "created" : 22,
-    "processing" : 29,
-    "completed" : 31,
-    "declined" : 3
-  } ]
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11T00:00:00",
+         "data":{
+            "count":83,
+            "created":24,
+            "processing":37,
+            "completed":21,
+            "declined":1
+         }
+      },
+      {
+         "tick":"2014-07-11T00:03:00",
+         "data":{
+            "count":83,
+            "created":24,
+            "processing":37,
+            "completed":21,
+            "declined":1
+         }
+      },
+      ...
+      {
+         "tick":"2014-07-12T00:00:00",
+         "data":{
+            "count":83,
+            "created":24,
+            "processing":37,
+            "completed":21,
+            "declined":1
+         }
+      }
+   ]
 }
 ```
 
@@ -806,38 +879,41 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 
 ```json
 {
-  "meta" : {
-    "page" : {
-      "total_elements" : 6
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "family_name" : "Дергачёв",
-    "given_name" : "Андрей",
-    "patronymic_name" : "Петрович",
-    "passport_series_number" : "45112456789",
-    "passport_issued_at" : "2007-06-07",
-    "itn" : "526317984689",
-    "status" : "data_entered",
-    "verified_at" : "2014-10-30T11:11:52.401Z",
-    "changed_at" : "2014-09-08T15:47:10.411Z",
-    "wallet" : {
-      "phone" : "+380631345678"
-    }
-  }, {
-    "family_name" : "Арсеньев",
-    "given_name" : "Алексей",
-    "patronymic_name" : "Александрович",
-    "passport_series_number" : "2202655111",
-    "passport_issued_at" : "2012-02-02",
-    "itn" : "330500938709",
-    "status" : "data_entered",
-    "changed_at" : "2014-10-24T15:09:12.019Z",
-    "wallet" : {
-      "phone" : "+380503839987"
-    }
-  } ]
+   "meta":{
+      "page":{
+         "total_elements":6
+      },
+      "code":200
+   },
+   "data":[
+      {
+         "family_name":"Дергачёв",
+         "given_name":"Андрей",
+         "patronymic_name":"Петрович",
+         "passport_series_number":"45112456789",
+         "passport_issued_at":"2007-06-07",
+         "itn":"526317984689",
+         "status":"data_entered",
+         "verified_at":"2014-10-30T11:11:52.401Z",
+         "changed_at":"2014-09-08T15:47:10.411Z",
+         "wallet":{
+            "phone":"+380631345678"
+         }
+      },
+      {
+         "family_name":"Арсеньев",
+         "given_name":"Алексей",
+         "patronymic_name":"Александрович",
+         "passport_series_number":"2202655111",
+         "passport_issued_at":"2012-02-02",
+         "itn":"330500938709",
+         "status":"data_entered",
+         "changed_at":"2014-10-24T15:09:12.019Z",
+         "wallet":{
+            "phone":"+380503839987"
+         }
+      }
+   ]
 }
 ```
 
@@ -856,24 +932,24 @@ $ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_veri
 
 ```json
 {
-    "meta": {
-        "code": 200
-    },
-    "data": {
-        "family_name": "Иванов",
-        "given_name": "Иван",
-        "patronymic_name": "Иванович",
-        "passport_series_number": "1122334455",
-        "passport_issued_at": "2012-12-20",
-        "itn": "330500938709",
-        "ssn": "11223344595",
-        "status": "data_verified",
-        "verified_at": "2014-10-22T10:26:12.035Z",
-        "changed_at": "2014-10-22T10:26:10.604Z",
-        "wallet": {
-            "phone": "+380935895452"
-        }
-    }
+   "meta":{
+      "code":200
+   },
+   "data":{
+      "family_name":"Иванов",
+      "given_name":"Иван",
+      "patronymic_name":"Иванович",
+      "passport_series_number":"1122334455",
+      "passport_issued_at":"2012-12-20",
+      "itn":"330500938709",
+      "ssn":"11223344595",
+      "status":"data_verified",
+      "verified_at":"2014-10-22T10:26:12.035Z",
+      "changed_at":"2014-10-22T10:26:10.604Z",
+      "wallet":{
+         "phone":"+380935895452"
+      }
+   }
 }
 ```
 
@@ -887,8 +963,8 @@ $ curl -uuser:user -X DELETE https://www.synq.ru/mserver2-dev/admin/wallets/+792
 
 ```json
 {
-  "meta" : {
-    "code" : 200
-  }
+   "meta":{
+      "code":200
+   }
 }
 ```
