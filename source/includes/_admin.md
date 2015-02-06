@@ -10,7 +10,7 @@
 | user       | user    | user              |
 | admin      | admin   | admin             |
 
-## Получение всех кошельков проекта
+## Поиск по кошелькам проекта
 
 ### Многопроектность
 
@@ -23,7 +23,8 @@
 
 ### Параметры
 
-* `order_by` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,created_at`. Можно указать направление через запятую, например: `amount,desc`
+* `order_by` - поле для сортировки. Можно указать несколько полей через запятую, например: `amount,created_at`
+* `order_direction` - Направление сортировки: asc или desc. Применяется к первому указанному полю в order_by
 * `group_by` - поле для группировки
 * `tick` (day|month) - выбор разреза при группировке (день, месяц). По умолчанию - день.
 
@@ -64,17 +65,19 @@
 
 ### Фильтры:
 
-- `ip_address` - по ip адресу
+- `ip` - по ip адресу
 - `created_before`
 - `created_after`
-- `person[given_name]` `person[family_name]` `person[patronymic_name]` - по ФИО, поиск полного совпадения или совпадения в начале
-- `person[status]` - по статусу идентификации
+- `person_given_name` `person_family_name` `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
+- `person_status` - по статусу идентификации
 - `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
-- `card_number` - по бин+номер карты - чтобы искать пользователей, у которых была привязана эта же карта, поиск любых совпадений внутри номера
+- `card_number_first` - по первым 6 цифрам номера карты
+- `card_number_last` - по последним 4 цифрам номера карты
 - `card_id` - по ID карты в IPSP
 - `amount_from`
 - `amount_to`
 - `active` - по статусу активации (true|false)
+- `enabled` - по статусу блокировки
 
 ### Группировки:
 
@@ -82,7 +85,7 @@
 - `created_at` - вернет количество новых регистрацией за каждый `tick`
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name=арсен&active=true&sort=payment_count,desc"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name=арсен&active=true&order_by=payment_count&order_direction=desc"
 ```
 
 ```json
@@ -264,7 +267,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 ## Получение кода активации кошелька
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/secure_code"
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/security_code"
 ```
 
 ```json
@@ -272,7 +275,9 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B1234565736
   "meta" : {
     "code" : 200
   },
-  "data" : "2899066"
+  "data" : {
+    "security_code": "2899066"
+  }
 }
 ```
 
@@ -328,63 +333,17 @@ $ curl -uuser:user -X POST "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12
 }
 ```
 
-## Получение платежей кошелька
+## Отчет об обороте кошелька по дням
+
+Пероид группировки (tick) - день
 
 ### Параметры
 
-* `wallet` - обязательный параметр, телефон кошелька чьи платежи мы хотим видеть
-* `type` - фильтр по типу платежа, допускается указание нескольких значений разделенный запятыми, опционально
-* `status`- фильтр по статусу платежа, допускается указание нескольких значений разделенный запятыми, опционально
-* `service` - идентификатор сервиса, опционально
-* `amount_from`и `amount_to` - границы диапазона сумм платежей, опционально
-* `date_from` и `date_to` - границы диапазона дат создания платежей, опционально
-* `page` - номер (начиная с 0) страницы, которую запрашивает клиент, опционально, по умолчанию 0
-* `size` - размер страницы, которую запрашивает клиент, опционально, по умолчанию 35
+* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+* `date_from`, `date_to` - Временной промежуток
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/payments?type=out&status=created&amount_from=0.5&amount_to=1&date_from=2014-08-01T12:10:15.525Z&date_to=2014-08-11T00:00:00.00Z&service=1"
-```
-
-```json
-{
-  "meta" : {
-    "page" : {
-      "total_elements" : 1
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "id" : 1401089240212,
-    "client_payment_id" : "c131a7e2-c553-4295-867e-1023359bee28",
-    "amount" : 1,
-    "total" : 4.01,
-    "created_at" : "2014-08-01T12:20:15.525Z",
-    "status" : "created",
-    "type" : "out",
-    "service" : {
-      "id" : 1,
-      "name" : "Мегафон"
-    },
-    "parameters" : [ {
-      "code" : "phoneNumber",
-      "name" : "№ телефона (10 цифр)",
-      "value" : "9157101280"
-    } ],
-    "outbound" : {
-      "id" : 35,
-      "code" : "tpr_out",
-      "name" : "ООО ТПР (провайдер)"
-    },
-    "wallet" : {
-      "phone" : "+79260000006"
-    }
-  } ]
-}
-```
-## Отчет об обороте кошелька по дням
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?from=2014-05-01&to=2014-06-03"
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?date_from=2014-05-01&date_to=2014-06-03"
 ```
 
 ```json
@@ -415,15 +374,28 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 * `type` - тип платежа
 * `status`- статус платежа
 * `service_name` - полное или частичное имя сервиса
-* `amount_from` и `amount_to` - границы диапазона сумм платежей
+* `service_id` - ID сервиса (как альтернатива service_name)
+* `amount_from` и `amount_to` - границы диапазона сумм платежей, формат UTC
 * `date_from` и `date_to` - границы диапазона дат создания платежей
-* `ipsp_payment_id` - идентификатор платежа из IPSP
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
 * `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
-* `sort` - поле сортировки через запятую может следовать направлене
+* `order_by` - поле для сортировки
+* `order_direction` - направление сортировки
+* `client_ip` - IP адрес плательщика
+* `inbound_payment_id` - идентификатор платежа из IPSP
+* `inbound_payment_status` - идентификатор платежа из IPSP
+* `inbound_payment_amount_from` и `inbound_payment_amount_to` - границы диапазона сумм платежей IPSP
+* `inbound_payment_date_from` и `inbound_payment_date_to` - границы диапазона дат создания платежей IPSP
+* `inbound_payment_card_number_first` - поиск по первым 6 цифрам номера карты
+* `inbound_payment_card_number_last` - поиск по последним 4 цифрам номера карты
+* `inbound_payment_card_number_last` - поиск по последним 4 цифрам номера карты
+* `inbound_payment_recurring` - фильтр по рекурентным платежам (true/false)
+* `inbound_payment_card_type` - поиск по вендору карт (MASTER_CARD/VISA/..?)
+* `inbound_payment_3ds` - поиск по 3ds статусу карты: unknown (ECI/SLI не получен ни на одном из шагов), attempted (06), skipped (07), successful (05)
+* `inbound_payment_user_ip` - поиск по IP адресу плательщика
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&sort=amount,desc&size=1"
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&order_by=amount&order_direction=desc&size=1"
 ```
 
 ```json
@@ -469,7 +441,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name
 > Пример фильтра по кошельку и IP
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B380935895452&payment_ip=127.0.0.1&size=1"
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B380935895452&client_ip=127.0.0.1&size=1"
 ```
 
 ```json
@@ -500,15 +472,15 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?wallet=%2B38
       "phone" : "+79555555555"
     },
     "direction" : "out",
-    "payment_ip" : "127.0.0.1"
+    "client_ip" : "127.0.0.1"
   } ]
 }
 ```
 
-> Пример фильтра по ipsp_payment_id
+> Пример фильтра по inbound_payment_id (id платежа в IPSP)
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment_id=6143708"
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?inbound_payment_id=6143708"
 ```
 
 ```json
@@ -531,12 +503,50 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment
     "inbound" : {
       "id" : 62,
       "code" : "ipsp_in",
-      "name" : "ООО ИПСП (агент)"
+      "name" : "ООО ИПСП (агент)",
+      "payment" : {
+        "amount" : 4200,
+        "id" : 1401089245752,
+        "type" : "SALE",
+        "date" : "2014-11-07T16:52:19.804Z",
+        "product_id" : 1721,
+        "currency" : "RUB",
+        "card_holder_name" : "TESTER TESTEROV",
+        "exp_year" : 2014,
+        "exp_month" : 11,
+        "remote_ip" : "81.95.134.13",
+        "user_ip" : "81.95.134.13",
+        "card_number_mask" : "541715******2399",
+        "card_type" : "MASTER_CARD",
+        "recurring" : false,
+        "steps" : [ {
+          "date" : "2014-11-07T16:52:19.867Z",
+          "status" : "PASSED_0",
+          "type" : "ANTIFRAUD"
+        }, {
+          "eci" : "06",
+          "date" : "2014-11-07T16:52:21.571Z",
+          "status" : "PASSED_0",
+          "type" : "BANK",
+          "auth_id_response" : "411421",
+          "date_local_trans" : "2014-11-07T13:52:21.000Z",
+          "response_code" : "APPROVED_00"
+        }, {
+          "date" : "2014-11-07T16:52:19.843Z",
+          "status" : "PASSED_0",
+          "type" : "PAYMENT_INPUT"
+        } ]
+      }
     },
     "card" : {
       "state" : "used",
       "title" : "541715******2399",
-      "type" : "MasterCard"
+      "type" : "MasterCard",
+      "bin" : {
+        "country" : "Ukraine",
+        "bank": "JCB PrivatBank",
+        "type": "debit"
+      }
     },
     "wallet" : {
       "phone" : "+79270000001",
@@ -550,128 +560,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?ipsp_payment
       "role" : "user",
       "created_at" : "2014-10-29T16:33:14.045Z"
     },
-    "payment_ip" : "81.95.134.13",
-    "card_payment" : {
-      "amount" : 4200,
-      "ipsp_payment_id" : 1401089245752,
-      "type" : "SALE",
-      "date" : "2014-11-07T16:52:19.804Z",
-      "product_id" : 1721,
-      "currency" : "RUB",
-      "card_holder_name" : "TESTER TESTEROV",
-      "exp_year" : 2014,
-      "exp_month" : 11,
-      "remote_ip" : "81.95.134.13",
-      "user_ip" : "81.95.134.13",
-      "card_number_mask" : "541715******2399",
-      "card_type" : "MASTER_CARD",
-      "recurring" : false,
-      "steps" : [ {
-        "date" : "2014-11-07T16:52:19.867Z",
-        "status" : "PASSED_0",
-        "type" : "ANTIFRAUD"
-      }, {
-        "eci" : "06",
-        "date" : "2014-11-07T16:52:21.571Z",
-        "status" : "PASSED_0",
-        "type" : "BANK",
-        "auth_id_response" : "411421",
-        "date_local_trans" : "2014-11-07T13:52:21.000Z",
-        "response_code" : "APPROVED_00"
-      }, {
-        "date" : "2014-11-07T16:52:19.843Z",
-        "status" : "PASSED_0",
-        "type" : "PAYMENT_INPUT"
-      } ]
-    }
-  } ]
-}
-```
-
-## Поиск по платежам IPSP
-
-### Параметры
-
-Все параметры опциональны
-
-* `wallet` - телефон кошелька, чьи платежи мы хотим видеть
-* `type` - тип платежа
-* `status`- статус платежа
-* `amount_from` и `amount_to` - границы диапазона сумм платежей
-* `date_from` и `date_to` - границы диапазона дат создания платежей
-* `ipsp_payment_id` - идентификатор платежа из IPSP
-* `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
-* `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
-* `sort` - поле сортировки через запятую может следовать направление
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments/ipsp?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&sort=amount,desc&size=1"
-```
-
-```json
-{
-  "meta" : {
-    "page" : {
-      "total_elements" : 14
-    },
-    "code" : 200
-  },
-  "data" : [ {
-    "amount" : 4200,
-    "ipsp_payment_id" : 1401089245752,
-    "type" : "SALE",
-    "date" : "2014-11-07T16:52:19.804Z",
-    "product_id" : 1721,
-    "currency" : "RUB",
-    "card_holder_name" : "TESTER TESTEROV",
-    "exp_year" : 2014,
-    "exp_month" : 11,
-    "remote_ip" : "81.95.134.13",
-    "user_ip" : "81.95.134.13",
-    "card_number_mask" : "541715******2399",
-    "card_type" : "MASTER_CARD",
-    "recurring" : false,
-    "steps" : [ {
-      "date" : "2014-11-07T16:52:19.867Z",
-      "status" : "PASSED_0",
-      "type" : "ANTIFRAUD"
-    }, {
-      "eci" : "06",
-      "date" : "2014-11-07T16:52:21.571Z",
-      "status" : "PASSED_0",
-      "type" : "BANK",
-      "auth_id_response" : "411421",
-      "date_local_trans" : "2014-11-07T13:52:21.000Z",
-      "response_code" : "APPROVED_00"
-    }, {
-      "date" : "2014-11-07T16:52:19.843Z",
-      "status" : "PASSED_0",
-      "type" : "PAYMENT_INPUT"
-    } ]
-  } ]
-}
-```
-
-## Отчет об остатке кошелька по дням
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/balance?from=2014-07-11&to=2014-07-13"
-```
-
-```json
-{
-  "meta" : {
-    "code" : 200
-  },
-  "data" : [ {
-    "tick" : "2014-07-11",
-    "amount" : 55572.14
-  }, {
-    "tick" : "2014-07-12",
-    "amount" : 55572.14
-  }, {
-    "tick" : "2014-07-13",
-    "amount" : 55572.14
+    "client_ip" : "81.95.134.13"
   } ]
 }
 ```
@@ -683,7 +572,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 ### Параметры
 
 * `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
-* `from`, `to` - Временной промежуток
+* `date_from`, `date_to` - Временной промежуток
 * `group_by` - параметр группировки
 
 ### Группировка
@@ -715,7 +604,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
 > Пример группировки по типу платежа
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-11&group_by=payment_type"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?date_from=2014-07-11&date_to=2014-07-11&group_by=payment_type"
 ```
 
 ```json
@@ -736,7 +625,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
 > Пример группировки по сервису
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-11&group_by=service"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?date_from=2014-07-11&date_to=2014-07-11&group_by=service"
 ```
 
 ```json
@@ -757,24 +646,24 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
 }
 ```
 
-## Отчет о количестве платежей проекта за период
+## Отчет о количестве платежей проекта за период 
 
 ### Параметры
 
-* `project_id` - ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
-* `from`, `to` - временной промежуток
-* `payment_status` - created | processing | completed | declined - статус платежа
-* `service_id` - фильтр по сервису или по списку сервисов. Идентификаторы через запятую (11,23,45)
+* `project_id` - (фильтр) ID проекта, в котором будет производиться поиск. Доступен только суперадминистраторам.
+* `date_from`, `date_to` - (фильтр) временной промежуток, по-умолчанию 1 месяц с текущего момента
+* `status` - (фильтр) created | processing | completed | declined - статус платежа
+* `service_id` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую (11,23,45)
 * `group_by` - параметр группировки
 * `tick` (30m | 3h | day | month) - выбор разреза при группировке. По умолчанию - день (day).
 
-### Группировка
-* `payment_status` - динамика проходимости платежей
+### Группировки
+* `status` - для динамики проходимости платежей
 
 > Подсчёт всех платежей за период
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from=2014-07-11&to=2014-07-12"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date_from=2014-07-11&date_to=2014-07-12"
 ```
 
 ```json
@@ -795,7 +684,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from
 > Пример с группировкой по статусу платежей
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from=2014-07-11&to=2014-07-11&group_by=payment_status&tick=3h"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date_from=2014-07-11&date_to=2014-07-11&group_by=status&tick=3h"
 ```
 
 ```json
@@ -805,19 +694,18 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from
   },
   "data" : [ {
     "tick" : "2014-07-11 00:00:00",
-    "count" : {
-      "created" : 24,
-      "processing" : 37,
-      "completed" : 21,
-      "declined" : 1
-    }
+    "created_count" : 24,
+    "processing_count" : 37,
+    "completed_count" : 21,
+    "declined_count" : 1,
+    "count" : 83
   }, {
     "tick" : "2014-07-11 00:03:00",
     "count" : {
       "created" : 22,
       "processing" : 29,
       "completed" : 31,
-      "declined" : 3
+      "declined" : 3,
     }
   },
   ...
@@ -842,10 +730,12 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?from
 
 `page` - номер страницы начиная с 0
 `size` - размер страницы
-`sort` - сортировка по полю, имя поля указывается в camelCase стиле, после запятой может следовать направление сортировки 
+`order_by` - сортировка по полю, имя поля указывается в snake_case стиле
+`order_direction` - направление сортировки
+`status` - фильтр по статусу сообщений. Например, для получения списка кошельков ожидающих идентификации
 
 ```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2&sort=givenName,desc
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2&order_by=givenName&order_direction=desc&status=data_entered
 ```
 
 ```json
@@ -893,7 +783,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 * `status` - `data_entered` | `data_verified` статус персональных данных
 
 ```shell
-$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006/update_status" 
+$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006" 
 ```
 
 > Результат содержит `"status": "data_verified", "verified_at": "2014-10-22T10:26:12.035Z"`
