@@ -539,3 +539,183 @@ $ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/payments/1838
 }
 ```
 > Платеж успешен. 
+
+## Отложенный выбор типа платежа
+
+Пользователь может отложить выбор типа платежа между `out` и `inout` до подтверждения платежа.
+Платеж может быть создан, как платеж со счета кошелька (`out`), затем, если клиент передумал и решил заплатить картой, 
+при подтверждении платежа вызовом 
+
+`POST` /payments/{:id}/pay 
+
+нужно передать в теле запроса следующие поля.
+
+### Поля запроса подтверждения платежа для смены типа in -> inout
+
+* `type` = inout - тип платежа
+* `store_card` - `true` | `false` - сохранить карту, чтобы использовать ее для платежей в дальнейшем (опциональный)
+* `card` - идентификатор сохраненной карты с которой будут списаны деньги (опциональный)
+
+
+Пример изменения типа платежа:
+
+> Создаем платеж используя кошелек, как источник средств:
+
+```shell
+$ curl -u+79261111111:password -H 'Content-type:application/json' 
+-d '{"type": "out", "amount": 100, "card": 7222, "service": 834, "parameters": {"phoneNumber": "9267101283"}}' 
+https://www.synq.ru/mserver2-dev/v1/payments
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10000
+    },
+    "next_action" : "pay"
+  },
+  "data" : {
+    "id" : 19493,
+    "client_payment_id" : "11140dd2-f002-4970-8603-fb48dc299673",
+    "amount" : 100,
+    "total" : 100.00,
+    "created_at" : "2015-02-09T11:36:54.263Z",
+    "status" : "created",
+    "type" : "out",
+    "service" : {
+      "id" : 834,
+      "name" : "Мегафон"
+    },
+    "parameters" : [ {
+      "code" : "phoneNumber",
+      "name" : "№ Телефона",
+      "value" : "9267101283"
+    } ],
+    "outbound" : {
+      "id" : 1,
+      "code" : "tpr_out",
+      "name" : "Кредит Пилот"
+    },
+    "wallet" : {
+      "phone" : "+79261111111"
+    }
+  }
+}
+```
+
+> Решаем, все-таки заплатить сохраненной картой с ID 7222:
+
+```shell
+$ curl -u+79261111111:password -H 'Content-type:application/json' 
+-d '{"type": "inout", "card": 7222}'
+https://www.synq.ru/mserver2-dev/v1/payments/19493/pay
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10000
+    },
+    "next_action" : "get"
+  },
+  "data" : {
+    "id" : 19493,
+    "client_payment_id" : "11140dd2-f002-4970-8603-fb48dc299673",
+    "amount" : 100,
+    "total" : 100,
+    "created_at" : "2015-02-09T11:36:54.263Z",
+    "status" : "processing",
+    "type" : "inout",
+    "service" : {
+      "id" : 834,
+      "name" : "Мегафон"
+    },
+    "parameters" : [ {
+      "code" : "phoneNumber",
+      "name" : "№ Телефона",
+      "value" : "9267101283"
+    } ],
+    "inbound" : {
+      "id" : 4,
+      "code" : "ipsp_in",
+      "name" : "ООО ИПСП (агент)"
+    },
+    "outbound" : {
+      "id" : 1,
+      "code" : "tpr_out",
+      "name" : "Кредит Пилот"
+    },
+    "card" : {
+      "id" : 7222,
+      "state" : "active",
+      "title" : "541715******6825",
+      "type" : "MasterCard"
+    },
+    "wallet" : {
+      "phone" : "+79261111111"
+    }
+  }
+}
+```
+
+> Проверяем статус платежа:
+
+```shell
+$ curl -u+79261111111:password https://www.synq.ru/mserver2-dev/v1/payments/19493
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "urgent_data" : {
+      "amount" : 10000
+    },
+    "next_action" : "get"
+  },
+  "data" : {
+    "id" : 19493,
+    "client_payment_id" : "11140dd2-f002-4970-8603-fb48dc299673",
+    "amount" : 100,
+    "total" : 100,
+    "created_at" : "2015-02-09T11:36:54.263Z",
+    "processed_at" : "2015-02-09T11:40:17.546Z",
+    "status" : "completed",
+    "type" : "inout",
+    "service" : {
+      "id" : 834,
+      "name" : "Мегафон"
+    },
+    "parameters" : [ {
+      "code" : "phoneNumber",
+      "name" : "№ Телефона",
+      "value" : "9267101283"
+    } ],
+    "inbound" : {
+      "id" : 4,
+      "code" : "ipsp_in",
+      "name" : "ООО ИПСП (агент)"
+    },
+    "outbound" : {
+      "id" : 1,
+      "code" : "tpr_out",
+      "name" : "Кредит Пилот"
+    },
+    "card" : {
+      "id" : 7222,
+      "state" : "active",
+      "title" : "541715******6825",
+      "type" : "MasterCard"
+    },
+    "wallet" : {
+      "phone" : "+79261111111"
+    },
+    "remote_check" : "1423482079404"
+  }
+}
+```
+> Платеж успешен. 
