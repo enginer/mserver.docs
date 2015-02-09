@@ -788,7 +788,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-0
 > Подсчёт всех платежей за период
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date_from=2014-07-11&date_to=2014-07-12"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-12"
 ```
 
 ```json
@@ -816,7 +816,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date
 > Пример с группировкой по статусу платежей
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments_count?date_from=2014-07-11&date_to=2014-07-11&group_by=status&tick=3h"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=status&tick=3h"
 ```
 
 ```json
