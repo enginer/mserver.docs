@@ -162,7 +162,9 @@ curl -H "Accept: application/json" -u mbank:secret https://www.synq.ru/mserver2-
 
 ## Тестовые приложения
 
-| client_id   | client_secret  | Разрешенные сценарии | URL перенаправления |  Время жизни токена, секунды |
-| :-----------|:---------------|:-------------------- |:--------------------|:-----------------------------|
-| mbank       | secret         | password             |                     | 3600                         |
-| mbank_web   | topsecret      | authorization_code   | https://bestmt.ru   | 2147483647                   |
+| client_id        | client_secret  | Разрешенные сценарии | URL перенаправления |  Время жизни токена, секунды |
+| :----------------|:---------------|:-------------------- |:--------------------|:-----------------------------|
+| mbank            | secret         | password             |                     | 3600                         |
+| mbank_web        | topsecret      | authorization_code   | http://refill.dev http://refill.nebo15.me http://mbank.dev http://schet.dev http://schet.nebo15.me http://schet.ru | 2147483647 |
+| mbank_storefront | oklol          | client_credentials   | http://refill.dev http://refill.nebo15.me http://mbank.dev http://schet.dev http://schet.nebo15.me http://schet.ru | 2147483647 |
+| bov              | secret         | password             |                     | 3600                         |
