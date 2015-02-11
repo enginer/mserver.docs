@@ -272,7 +272,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 * `ipsp_payment_id` - идентификатор платежа из IPSP
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
 * `size` - размер страницы, которую запрашивает клиент, по умолчанию 20
-* `sort` - поле сортировки через запятую может следовать направлене
+* `sort` - поле сортировки, через запятую может следовать направление
 
 ```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?service_name=mts&type=out&status=created&amount_from=0&amount_to=100000&date_from=2014-01-01T12:10:15.525Z&date_to=2014-12-01T00:00:00.00Z&sort=amount,desc&size=1"
