@@ -740,7 +740,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/payments?inbound_paym
 * `date_from`, `date_to` - Временной промежуток
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/balance?from=2014-07-11&to=2014-07-13"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets/balance?from=2014-07-11&to=2014-07-13"
 ```
 
 ```json
