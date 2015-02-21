@@ -301,17 +301,46 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
          }
       ],
       "limits":{
-         "in_amount_limit":15000,
-         "out_amount_limit":15000,
-         "wallet_amount_limit":15000,
-         "monthly_in_turnover_limit":40000,
-         "monthly_out_turnover_limit":40000,
-         "monthly_p2p_turnover_limit":40000,
-         "active_cards_limit":10,
-         "in_amount_limit_available":15000,
-         "out_amount_limit_available":15000,
-         "wallet_amount_limit_available":15000,
-         "active_cards_limit_available":10
+         "amount": {
+            "in": {
+               "limit": 15000,
+               "available": 15000
+            },
+            "out": {
+               "limit": 15000,
+               "available": 15000
+            },
+            "p2p": {
+               "limit": 15000,
+               "available": 15000
+            },
+            "wallet": {
+               "limit": 15000,
+               "available": 15000
+            },
+         },
+         "turnover": {
+             "monthly": {
+                "in": {
+                   "limit": 15000,
+                   "available": 15000
+                },
+                "out": {
+                   "limit": 15000,
+                   "available": 15000
+                },
+                "p2p": {
+                   "limit": 15000,
+                   "available": 15000
+                },
+             },
+         },
+         "cards": {
+            "active": {
+               "limit": 10,
+               "available": 8,
+            }
+         }
       },
       "statistics":{
          "payments":{
