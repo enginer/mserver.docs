@@ -57,7 +57,7 @@ $ curl -H 'Content-type:application/json'
     "check_digit" : "8" 
   },
   "dev" : {
-    "activation_code" : "242321"
+    "security_code" : "242321"
   }
 }
 ```
