@@ -449,107 +449,6 @@ $ curl -uuser:user -X POST "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12
 ```
 
 
-## Отчет об обороте кошелька по дням
-
-### Параметры
-
-* `date_from`, `date_to` - Временной промежуток
-* `group_by` - параметр группировки
-* `tick` - период группировки, по-умолчанию - день
-
-### Группировка
-
-* `payment_type` - входящий и исходящий потоки
-* `service_id` - по сервисам
-
-> Пример запроса оборота
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?date_from=2014-05-01&date_to=2014-06-03"
-```
-
-```json
-{
-   "meta":{
-      "code":200
-   },
-   "data":[
-      {
-         "tick":"2014-06-01",
-         "data":{
-            "turnover":125477.16
-         }
-      },
-      {
-         "tick":"2014-06-02",
-         "data":{
-            "turnover":0
-         }
-      },
-      {
-         "tick":"2014-06-03",
-         "data":{
-            "turnover":0
-         }
-      }
-   ]
-}
-```
-
-> Пример группировки по типу платежа
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?group_by=payment_type&date_from=2014-07-11&date_to=2014-07-11"
-```
-
-```json
-{
-   "meta":{
-      "code":200
-   },
-   "data":[
-      {
-         "tick":"2014-07-11",
-         "data":{
-            "in":25572.14,
-            "out":35245.12,
-            "p2p":0
-         }
-      }
-   ]
-}
-```
-
-> Пример группировки по сервису, возвращает
-
-```shell
-$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B79260000006/turnover?date_from=2014-07-11&date_to=2014-07-11&group_by=service"
-```
-
-```json
-{
-   "meta":{
-      "code":200
-   },
-   "data":[
-      {
-         "tick":"2014-07-11",
-         "data":[
-            {
-               "service_id":14,
-               "amount":35245.12
-            },
-            {
-               "service_id":16,
-               "amount":3527.10
-            }
-         ]
-      }
-   ]
-}
-```
-
-
 ## Поиск по платежам
 
 ### Параметры (опциональные)
@@ -807,12 +706,15 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets/balance?fro
 
 * `date_from`, `date_to` - (фильтр) временной промежуток, по-умолчанию 1 месяц с текущего момента
 * `status` - (фильтр) created | processing | completed | declined - статус платежа
-* `service_ids` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую (11,23,45)
+* `service_ids` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую и/или флаг p2p (11,23,45,p2p)
 * `group_by` - параметр группировки
+* `wallet` - фильтр по номеру кошелька (смотреть данные в разрезе кошелька)
 * `tick` (30m | 3h | day | month) - выбор разреза при группировке. По умолчанию - день (day).
 
 ### Группировки
 * `status` - для динамики проходимости платежей
+* `service_ids` - для распределения платежей по сервисам, включая P2P как отдельный тип
+* `provider_types` - по типу провайдеров, через которые проходили транзакции
 
 > Подсчёт всех платежей за период
 
@@ -889,6 +791,233 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
 }
 ```
 
+> Пример группировки по типу поставщика
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=provider_types&tick=3h"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-12T00:00:00",
+         "data":{
+            "count":83,
+            "providers":[
+               {
+                  "id" : 1,
+                  "code" : "tpr_out",
+                  "name" : "Кредит Пилот",
+                  "type" : "outbound", 
+                  "count": 50
+               },
+               {
+                  "id" : 4,
+                  "code" : "ipsp_in",
+                  "name" : "ООО ИПСП (агент)",
+                  "type" : "inbound",
+                  "count": 50
+                }
+            ]
+         }
+      }
+      ...
+   ]
+}
+```
+
+> Пример группировки по сервису, возвращает
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=service_ids&tick=3h"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-12T00:00:00",
+         "data":{
+            "count":83,
+            "services":[
+               {
+                  "type" : "out",
+                  "id" : 834,
+                  "count": 50
+               },
+               {
+                  "type" : "out",
+                  "id" : 4,
+                  "count": 30
+                },
+                {
+                  "type" : "p2p",
+                  "count": 20
+                }
+            ]
+         }
+      }
+      ...
+   ]
+}
+```
+
+## Отчет о обороте платежей проекта за период
+
+### Параметры
+
+* `date_from`, `date_to` - (фильтр) временной промежуток, по-умолчанию 1 месяц с текущего момента
+* `amount_from`, `amount_to` - (фильтр) по сумме платежа
+* `status` - (фильтр) created | processing | completed | declined - статус платежа
+* `service_ids` - (фильтр) сервис или сервисок идентификаторов сервисов через запятую и/или флаг p2p (11,23,45,p2p) 
+* `group_by` - параметр группировки
+* `wallet` - фильтр по номеру кошелька (смотреть данные в разрезе кошелька)
+* `tick` (30m | 3h | day | month) - выбор разреза при группировке. По умолчанию - день (day).
+
+### Группировки
+* `status` - для динамики проходимости платежей
+* `service_ids` - для распределения платежей по сервисам, включая P2P как отдельный тип
+* `provider_types` - по типу провайдеров, через которые проходили транзакции
+
+> Оборот всех платежей за период
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?date_from=2014-07-11&date_to=2014-07-12"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11",
+         "data": {
+             "amount":1233424
+         }
+      },
+      {
+         "tick":"2014-07-12",
+         "data": {
+             "amount":98234342
+         }
+      }
+   ]
+}
+```
+
+> Пример с группировкой по статусу платежей
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?date_from=2014-07-11&date_to=2014-07-11&group_by=status&tick=3h"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-11T00:00:00",
+         "data":{
+            "amount":83324324324,
+            "created":2434234,
+            "processing":3723434,
+            "completed":2123423,
+            "declined":12
+         }
+      },
+      ...
+   ]
+}
+```
+
+> Пример группировки по типу поставщика
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?date_from=2014-07-11&date_to=2014-07-11&group_by=provider_types&tick=3h"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-12T00:00:00",
+         "data":{
+            "amount":83,
+            "providers":[
+               {
+                  "id" : 1,
+                  "code" : "tpr_out",
+                  "name" : "Кредит Пилот",
+                  "type" : "outbound", 
+                  "amount": 5043
+               },
+               {
+                  "id" : 4,
+                  "code" : "ipsp_in",
+                  "name" : "ООО ИПСП (агент)",
+                  "type" : "inbound",
+                  "amount": 1293
+                }
+            ]
+         }
+      }
+      ...
+   ]
+}
+```
+
+> Пример группировки по сервису, возвращает
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=service_ids&tick=3h"
+```
+
+```json
+{
+   "meta":{
+      "code":200
+   },
+   "data":[
+      {
+         "tick":"2014-07-12T00:00:00",
+         "data":{
+            "amount":83243,
+            "services":[
+               {
+                  "type" : "out",
+                  "id" : 834,
+                  "amount": 50234
+               },
+               {
+                  "type" : "out",
+                  "id" : 4,
+                  "amount": 3012
+               },
+               {
+                  "type" : "p2p",
+                  "amount": 2033
+               }
+            ]
+         }
+      }
+      ...
+   ]
+}
+```
 
 ## Получение списка персональных данных
 
