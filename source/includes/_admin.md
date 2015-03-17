@@ -856,12 +856,12 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
                   "type" : "out",
                   "id" : 4,
                   "count": 30
-                },
-                {
-                  "type" : "p2p",
-                  "count": 20
                 }
-            ]
+            ],
+            "p2p: {
+               "type" : "p2p",
+               "count": 20
+            }
          }
       }
       ...
@@ -1006,12 +1006,11 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
                   "type" : "out",
                   "id" : 4,
                   "amount": 3012
-               },
-               {
-                  "type" : "p2p",
-                  "amount": 2033
                }
-            ]
+            ],
+            "p2p: {
+               "amount": 20
+            }
          }
       }
       ...
