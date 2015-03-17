@@ -457,7 +457,7 @@ $ curl -uuser:user -X POST "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12
 * `type` - тип платежа
 * `status`- статус платежа
 * `service_name` - полное или частичное имя сервиса
-* `service_ids` - список ID сервиса (как альтернатива service_name), ID сервисов перечисляются через запятую, например: 3,19,293
+* `service_ids` - список ID сервиса (как альтернатива service_name), ID сервисов перечисляются через запятую, например: 3,19,293,p2p
 * `amount_from` и `amount_to` - границы диапазона сумм платежей, формат UTC
 * `date_from` и `date_to` - границы диапазона дат создания платежей
 * `page` - номер (начиная с 0) страницы, которую запрашивает клиент, по умолчанию 0
@@ -859,7 +859,6 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
                 }
             ],
             "p2p: {
-               "type" : "p2p",
                "count": 20
             }
          }
