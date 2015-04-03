@@ -378,7 +378,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 
 ## Загрузка IP адресов кошелька
 
-
+```shell
 $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/ip"
 ```
 
