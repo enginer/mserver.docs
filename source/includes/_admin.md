@@ -376,6 +376,23 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B7926000000
 }
 ```
 
+## Загрузка IP адресов кошелька
+
+
+$ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/wallets/%2B12345657367/ip"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "page" : {
+      "total_elements" : 21
+    }
+  },
+  "data" : [ "127.0.0.1", "::1"]
+}
+```
 
 ## Получение кода активации кошелька
 
