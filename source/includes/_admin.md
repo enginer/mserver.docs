@@ -71,12 +71,12 @@
 
 ### Фильтры:
 
-* `ip` - по ip адресу
+* `ips` - по списку IP адресов разделённых запятой
 * `created_before` и `created_after` - по дате регистрации
 * `person_given_name`, `person_family_name` и `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
 * `person_status` - по статусу идентификации
 * `person_passport_series_number` - по номеру и серии паспорта
-* `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
+* `phones` - по списку номеров телефонов, разделённых запятыми; поиск полного совпадения или совпадения в начале
 * `card_number_first` - по первым 6-ти цифрам номера карты
 * `card_number_last` - по последним 4-ем цифрам номера карты
 * `card_id` - по ID карты в IPSP
@@ -159,12 +159,12 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
 ### Фильтры:
 (См. "Поиск по кошелькам")
 
-* `ip` - по ip адресу
+* `ips` - по списку IP адресов разделённых запятой
 * `created_before` и `created_after` - по дате регистрации
 * `person_given_name`, `person_family_name` и `person_patronymic_name` - по ФИО, поиск полного совпадения или совпадения в начале
 * `person_status` - по статусу идентификации
 * `person_passport_series_number` - по номеру и серии паспорта
-* `phone` - по номеру телефона, поиск полного совпадения или совпадения в начале
+* `phones` - по списку номеров телефонов, разделённых запятыми; поиск полного совпадения или совпадения в начале
 * `card_number_first` - по первым 6-ти цифрам номера карты
 * `card_number_last` - по последним 4-ем цифрам номера карты
 * `card_id` - по ID карты в IPSP
@@ -179,7 +179,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets?family_name
 > Количество зарегистрированных кошельков с фильтром
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets_count?active=true"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets/count?active=true"
 ```
 
 ```json
