@@ -49,3 +49,5 @@ $ curl -u+79261111111:password -H 'Content-type:application/json'
 * `destination_not_found` - кошелек назначения платежа не найден
 * `invalid_destination` - попытка отправить p2p перевод самому себе
 * `insufficient_funds` - недостаточно средств для выполнения p2p перевода
+* `wallet_not_identified` - отправитель p2p перевода не идентифицирован
+* `destination_wallet_not_identified` - получатель p2p перевода не идентифицирован
