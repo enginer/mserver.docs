@@ -1105,7 +1105,7 @@ $ curl -uuser:user "https://www.synq.ru/mserver2-dev/admin/persons?page=1&size=2
 * `status` - `data_entered` | `data_verified` статус персональных данных
 
 ```shell
-$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006"
+$ curl  -H 'Content-type:application/json' -uuser:user -d '{"status": "data_verified"}' "https://www.synq.ru/mserver2-dev/admin/persons/%2B79260000006/update_status"
 ```
 
 > Результат содержит `"status": "data_verified", "verified_at": "2014-10-22T10:26:12.035Z"`
