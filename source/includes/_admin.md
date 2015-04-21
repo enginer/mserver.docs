@@ -731,6 +731,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/wallets/balance?fro
 ### Группировки
 * `status` - для динамики проходимости платежей
 * `service_ids` - для распределения платежей по сервисам, включая P2P как отдельный тип
+* `service_ids,status` - по сервисам и статусам
 * `provider_types` - по типу провайдеров, через которые проходили транзакции
 
 > Подсчёт всех платежей за период
@@ -847,7 +848,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
 }
 ```
 
-> Пример группировки по сервису, возвращает
+> Пример группировки по сервису
 
 ```shell
 $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=service_ids&tick=3h"
@@ -886,6 +887,67 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
 }
 ```
 
+> Пример группировки по сервису и статусу
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?tick=month&service_ids=1691&group_by=service_ids,status"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "page" : {
+      "total_elements" : 2
+    }
+  },
+  "data" : [ {
+    "data" : {
+      "count" : 66,
+      "services" : [ {
+        "data" : {
+          "declined" : 2,
+          "created" : 51,
+          "count" : 61,
+          "completed" : 8
+        },
+        "id" : 1691,
+        "type" : "out"
+      }, {
+        "data" : {
+          "count" : 5,
+          "completed" : 5
+        },
+        "id" : 1691,
+        "type" : "inout"
+      } ]
+    },
+    "tick" : "2015-02-28T22:00:00.000+0000"
+  }, {
+    "data" : {
+      "count" : 15,
+      "services" : [ {
+        "data" : {
+          "created" : 7,
+          "count" : 14,
+          "completed" : 7
+        },
+        "id" : 1691,
+        "type" : "out"
+      }, {
+        "data" : {
+          "declined" : 1,
+          "count" : 1
+        },
+        "id" : 1691,
+        "type" : "inout"
+      } ]
+    },
+    "tick" : "2015-03-31T21:00:00.000+0000"
+  } ]
+}
+```
+
 ## Отчет о обороте платежей проекта за период
 
 ### Параметры
@@ -901,6 +963,7 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
 ### Группировки
 * `status` - для динамики проходимости платежей
 * `service_ids` - для распределения платежей по сервисам, включая P2P как отдельный тип
+* `service_ids,status` - по сервисам и статусам
 * `provider_types` - по типу провайдеров, через которые проходили транзакции
 
 > Оборот всех платежей за период
@@ -1002,10 +1065,10 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?d
 }
 ```
 
-> Пример группировки по сервису, возвращает
+> Пример группировки по сервису
 
 ```shell
-$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date_from=2014-07-11&date_to=2014-07-11&group_by=service_ids&tick=3h"
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?date_from=2014-07-11&date_to=2014-07-11&group_by=service_ids&tick=3h"
 ```
 
 ```json
@@ -1038,6 +1101,67 @@ $ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/count?date
       }
       ...
    ]
+}
+```
+
+> Пример группировки по сервису и статусу
+
+```shell
+$ curl -uadmin:admin "https://www.synq.ru/mserver2-dev/admin/payments/turnover?tick=month&service_ids=1691&group_by=service_ids,status"
+```
+
+```json
+{
+  "meta" : {
+    "code" : 200,
+    "page" : {
+      "total_elements" : 2
+    }
+  },
+  "data" : [ {
+    "data" : {
+      "amount" : 154,
+      "services" : [ {
+        "data" : {
+          "amount" : 144,
+          "declined" : 20,
+          "created" : 114,
+          "completed" : 10
+        },
+        "id" : 1691,
+        "type" : "out"
+      }, {
+        "data" : {
+          "amount" : 10,
+          "completed" : 10
+        },
+        "id" : 1691,
+        "type" : "inout"
+      } ]
+    },
+    "tick" : "2015-02-28T22:00:00.000+0000"
+  }, {
+    "data" : {
+      "amount" : 114,
+      "services" : [ {
+        "data" : {
+          "amount" : 14,
+          "created" : 7,
+          "completed" : 7
+        },
+        "id" : 1691,
+        "type" : "out"
+      }, {
+        "data" : {
+          "amount" : 100,
+          "declined" : 100
+        },
+        "id" : 1691,
+        "type" : "inout"
+      } ]
+    },
+    "tick" : "2015-03-31T21:00:00.000+0000"
+  } ]
 }
 ```
 
